@@ -1,0 +1,127 @@
+version: "v0.4"
+
+project:
+  name: "C-separated NP-complete relaxation"
+  description: >-
+    A Lean 4 translation of Karamata's inequality for finite descending real
+    vectors and convex functions on convex domains, together with the
+    zero-selector lemma for c-separated Gaussian instances.
+  authors:
+    - "Repository maintainer"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Repository maintainer"
+
+classification:
+  arxiv: ["cs.LO", "math.LO"]
+  msc2020: ["03B35", "68Q17"]
+
+sources:
+  - title: "The accompanying Rocq development in this repository"
+    type: "formalization"
+    relationship: "adapts"
+    location: "sepsolve.v"
+    note: >-
+      The zero-selector lemma is translated; the final gadget equivalence and
+      full Rocq development have not yet been translated.
+  - title: "Karamata's inequality in the accompanying Rocq development"
+    type: "formalization"
+    relationship: "adapts"
+    location: "Karamata.v: Karamata_inequality"
+    note: >-
+      The Lean proof follows the secant-slope and summation-by-parts argument,
+      replacing source infrastructure with Mathlib convexity, monotone
+      extension, and Abel summation results.
+
+related_formalizations:
+  - id: "Karamata.v"
+    relationship: "adapts"
+    note: "The accompanying Rocq proof is the source of the Lean Karamata translation."
+
+status:
+  scope: >-
+    The Lean project proves c_separates_zero and general Karamata_inequality.
+    The final partition_gadget_schedule_partition_iff, reduction gadgets,
+    schedule, and NP-completeness conclusion are not yet formalized in Lean.
+    The two deliberate Challenge placeholders are excluded from sorry_count;
+    Solution and its transitive dependencies contain no unresolved proofs.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "CSeparatedNPComplete.c_separates_zero"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "CSeparatedNPComplete.Karamata_inequality"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+
+automation:
+  methods:
+    - method: "manual"
+      models: []
+      framework: "Lean 4 and Mathlib"
+      tool_setup: "VS Code Lean tooling"
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "not tracked"
+        hardware: "local machine"
+        prompting_notes: "n/a"
+    - method: "agent"
+      models: ["GPT-6"]
+      framework: "Codex"
+      tool_setup: "Local Mathlib source inspection, collaborative proof development, and Lean builds"
+      prompting_notes: >-
+        Translate the general Karamata inequality using as much Mathlib as
+        possible, using Karamata.v as a reference, toward a later translation
+        of the final equivalence in sepsolve.v.
+  spend_usd: "not tracked"
+  notes: >-
+    The Karamata translation and statement packaging were developed with AI
+    assistance, including agent review and Lean checking. Independent human
+    review and the broader translation are pending.
+
+fidelity:
+  divergences: >-
+    The current Lean slice uses functions Fin n -> Real and lists instead of
+    Rocq Vector.t values. Karamata's domain convexity and conditional function
+    convexity are bundled as convexOnPredicate, proved equivalent to Mathlib
+    ConvexOn. Equal coordinates are handled by extending secant slopes rather
+    than deleting coordinates. The mathematical Karamata assumptions and
+    conclusion match the source; the full source development is not covered.
+
+review:
+  status: "agent-reviewed"
+  reviewers: ["Codex agents"]
+  notes: >-
+    Local Lean build and theorem axiom inspection completed. Separate Lean
+    environments confirmed exact agreement of both configured theorem types
+    and all eleven shared definition types and bodies. Agents reviewed source
+    fidelity and compiled examples for empty vectors, identical vectors, and
+    a closed interval with shared coordinates. No independent human mathematical
+    review, full Comparator verification, or Palomar submission has occurred.
+
+alignment:
+  namespace: "CSeparatedNPComplete"
+  statements:
+    - source: "sepsolve.v: initial c_separates zero-selector goal"
+      lean: "CSeparatedNPComplete.c_separates_zero"
+      module: "Solution"
+      status: "adapted"
+      note: "Uses a list-based Lean encoding of the source recursive predicate."
+    - source: "Karamata.v: Karamata_inequality"
+      lean: "CSeparatedNPComplete.Karamata_inequality"
+      module: "Solution"
+      status: "proved"
+      note: "All finite dimensions; convex predicate domain; descending majorization."
+    - source: "sepsolve.v: partition_gadget_schedule_partition_iff"
+      lean: ""
+      module: ""
+      status: "not-formalized"
+      note: "The intended later milestone; its source proof uses direct reciprocal inequalities."
+
+acknowledgements: "Lean 4, Mathlib, Rocq source development, and Palomar Registry guidance."

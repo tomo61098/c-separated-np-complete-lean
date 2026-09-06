@@ -1,0 +1,23 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "CSeparatedNPComplete.c_separates_zero",
+    "CSeparatedNPComplete.Karamata_inequality"
+  ],
+  "definition_names": [
+    "CSeparatedNPComplete.Vec",
+    "CSeparatedNPComplete.Gaussian",
+    "CSeparatedNPComplete.dot",
+    "CSeparatedNPComplete.sqVec",
+    "CSeparatedNPComplete.isCASeparated",
+    "CSeparatedNPComplete.cSeparates",
+    "CSeparatedNPComplete.vecSum",
+    "CSeparatedNPComplete.prefixSum",
+    "CSeparatedNPComplete.sortedDesc",
+    "CSeparatedNPComplete.majorized",
+    "CSeparatedNPComplete.convexOnPredicate"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}
