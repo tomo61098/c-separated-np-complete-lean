@@ -5,7 +5,7 @@ namespace CSeparatedNPComplete
 /-- The chord bound for the reciprocal potential on the unit interval. -/
 theorem inv_one_plus_le_line (x : ℝ) (hx : 0 ≤ x ∧ x ≤ 1) :
     (1 + x)⁻¹ ≤ 1 - x / 2 := by
-  rw [inv_le_iff₀ (by linarith : 0 < 1 + x)]
+  rw [← one_div, div_le_iff₀ (by linarith : 0 < 1 + x)]
   nlinarith [mul_nonneg hx.1 (sub_nonneg.mpr hx.2)]
 
 /-- The chord is attained exactly at the two binary endpoints. -/

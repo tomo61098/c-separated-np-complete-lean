@@ -1,7 +1,9 @@
 import CSeparatedNPComplete
 
 /-!
-Proved counterparts of the independent declarations in `Challenge.lean`.
+The main proof `partition_gadget_schedule_partition_iff` is imported from
+`CSeparatedNPComplete.Partition`; it is stated independently in `Challenge.lean`.
+The declarations below retain the earlier auxiliary results.
 The solution does not import the Challenge module or its statement placeholders.
 -/
 

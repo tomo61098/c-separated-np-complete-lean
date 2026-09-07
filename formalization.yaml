@@ -1,29 +1,58 @@
 version: "v0.4"
 
 project:
-  name: "C-separated NP-complete relaxation"
+  name: "Gaussian separation and equal-cardinality partition"
   description: >-
-    A Lean 4 translation of Karamata's inequality for finite descending real
-    vectors and convex functions on convex domains, together with the
-    zero-selector lemma for c-separated Gaussian instances.
-  authors:
-    - "Repository maintainer"
+    A Lean 4 translation of the pointwise equivalence between a Gaussian
+    gadget-and-schedule hinge bound and equal-cardinality partition of
+    perfect-square inputs. The threshold depends on the selector. General
+    Karamata inequality and the zero-selector lemma are auxiliary results.
+  authors: []
   license: "Apache-2.0"
-  responsible_maintainers:
-    - "Repository maintainer"
+  responsible_maintainers: []
+  authorship_note: >-
+    Actual formalization authors and responsible maintainers await user
+    confirmation before submission. The manuscript's template author block
+    has not been copied as a bibliographic attribution.
 
 classification:
-  arxiv: ["cs.LO", "math.LO"]
+  arxiv: ["cs.LO", "cs.CC"]
   msc2020: ["03B35", "68Q17"]
 
 sources:
+  - title: "On the NP-Hardness of Feature-Weighted Gaussian c-Separation with Relaxed Selection"
+    type: "unpublished manuscript"
+    relationship: "adapts"
+    id: "c_separation_NP_completness-4.pdf"
+    location: "Introduction; partition gadget and binary-well construction"
+    note: >-
+      The accompanying manuscript supplies the mathematical context.
+      Bibliographic authorship awaits confirmation; the PDF contains a
+      template author block. The formalization follows the precise Rocq
+      equivalence, not every complexity or approximation claim in the paper.
+  - title: "Optimal Marker Genes for c-Separated Cell Types"
+    authors:
+      - "Bartol Borozan"
+      - "Luka Borozan"
+      - "Domagoj Ševerdija"
+      - "Domagoj Matijević"
+      - "Stefan Canzar"
+    type: "conference paper"
+    relationship: "background"
+    id: "https://doi.org/10.1007/978-3-031-90252-9_53"
+    location: "Research in Computational Molecular Biology, RECOMB 2025, LNCS 15647, pp. 424–427"
+    note: >-
+      Published background for the Gaussian c-separation feature-selection
+      formulation, cited as reference 1 in the manuscript. This is not the
+      source of the relaxed gadget equivalence formalized here.
   - title: "The accompanying Rocq development in this repository"
     type: "formalization"
     relationship: "adapts"
-    location: "sepsolve.v"
+    id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v#L2782"
+    location: "sepsolve.v:2782, partition_gadget_schedule_partition_iff"
     note: >-
-      The zero-selector lemma is translated; the final gadget equivalence and
-      full Rocq development have not yet been translated.
+      Direct reference for the main theorem's hypotheses, construction, and
+      conclusion, including its selector-dependent threshold.
   - title: "Karamata's inequality in the accompanying Rocq development"
     type: "formalization"
     relationship: "adapts"
@@ -34,31 +63,32 @@ sources:
       extension, and Abel summation results.
 
 related_formalizations:
+  - id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v"
+    relationship: "adapts"
+    note: "The accompanying Rocq gadget, schedule, and final equivalence proofs."
   - id: "Karamata.v"
     relationship: "adapts"
     note: "The accompanying Rocq proof is the source of the Lean Karamata translation."
 
 status:
   scope: >-
-    The Lean project proves c_separates_zero and general Karamata_inequality.
-    The final partition_gadget_schedule_partition_iff, reduction gadgets,
-    schedule, and NP-completeness conclusion are not yet formalized in Lean.
-    The two deliberate Challenge placeholders are excluded from sorry_count;
-    Solution and its transitive dependencies contain no unresolved proofs.
+    The sole submission target is partition_gadget_schedule_partition_iff.
+    The main theorem and its dependencies are proved, lake build passes,
+    and main-theorem axiom inspection found only the three standard axioms.
+    The result is a pointwise equivalence with a selector-dependent
+    threshold, in dimension 2*d with 2*d+3 Gaussian classes. NP-hardness,
+    polynomial-time encoding, NP membership, and the manuscript's LP and
+    PTAS results are outside the formalized scope.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
   main_results:
-    - declaration: "CSeparatedNPComplete.c_separates_zero"
-      file: "Solution.lean"
+    - declaration: "CSeparatedNPComplete.partition_gadget_schedule_partition_iff"
+      file: "CSeparatedNPComplete/Partition.lean"
+      comparator_config: "comparator.json"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "comparator.json"
-    - declaration: "CSeparatedNPComplete.Karamata_inequality"
-      file: "Solution.lean"
-      sorry_count: 0
-      axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "comparator.json"
+      verification_status: "Lean build and axiom audit passed; full Comparator verification pending"
 
 automation:
   methods:
@@ -76,33 +106,41 @@ automation:
       framework: "Codex"
       tool_setup: "Local Mathlib source inspection, collaborative proof development, and Lean builds"
       prompting_notes: >-
-        Translate the general Karamata inequality using as much Mathlib as
-        possible, using Karamata.v as a reference, toward a later translation
-        of the final equivalence in sepsolve.v.
+        Translate the final equivalence in sepsolve.v and its Gaussian
+        construction. Prove general Karamata inequality using as much
+        Mathlib as possible, with Karamata.v as a reference. Use the manuscript
+        for mathematical context and preserve the source scope.
   spend_usd: "not tracked"
   notes: >-
-    The Karamata translation and statement packaging were developed with AI
-    assistance, including agent review and Lean checking. Independent human
-    review and the broader translation are pending.
+    The Lean translation was developed with AI assistance, including parallel
+    proof development, source review, and Lean checking. The main theorem
+    is complete; independent human review remains pending.
 
 fidelity:
   divergences: >-
-    The current Lean slice uses functions Fin n -> Real and lists instead of
-    Rocq Vector.t values. Karamata's domain convexity and conditional function
+    The development uses functions Fin n -> Real and lists instead of Rocq
+    Vector.t values. Scalar schedule recursions become finite sums, and
+    covariances are factored as in the source's proved factorization. The
+    main statement retains d > 1, half-total at least 1, natural-square
+    coordinates, and the threshold's dependence on the zeroth selector
+    coordinate. Its Gaussian count is 2*d+3 in dimension 2*d; the manuscript's
+    introductory class-count claims do not replace the source definition.
+    Karamata's domain convexity and conditional function
     convexity are bundled as convexOnPredicate, proved equivalent to Mathlib
     ConvexOn. Equal coordinates are handled by extending secant slopes rather
     than deleting coordinates. The mathematical Karamata assumptions and
-    conclusion match the source; the full source development is not covered.
+    conclusion match the source. The full manuscript and Rocq development
+    are not covered.
 
 review:
   status: "agent-reviewed"
   reviewers: ["Codex agents"]
   notes: >-
-    Local Lean build and theorem axiom inspection completed. Separate Lean
-    environments confirmed exact agreement of both configured theorem types
-    and all eleven shared definition types and bodies. Agents reviewed source
-    fidelity and compiled examples for empty vectors, identical vectors, and
-    a closed interval with shared coordinates. No independent human mathematical
+    Auxiliary Karamata and gadget proofs passed local Lean checks. Karamata
+    examples covered empty vectors, identical vectors, and a closed interval
+    with shared coordinates. Agents reviewed source fidelity and manuscript
+    context. Main-theorem build and axiom inspection passed. Independent
+    statement comparison for the main theorem remains pending. No independent human mathematical
     review, full Comparator verification, or Palomar submission has occurred.
 
 alignment:
@@ -111,17 +149,17 @@ alignment:
     - source: "sepsolve.v: initial c_separates zero-selector goal"
       lean: "CSeparatedNPComplete.c_separates_zero"
       module: "Solution"
-      status: "adapted"
-      note: "Uses a list-based Lean encoding of the source recursive predicate."
+      status: "proved"
+      note: "Auxiliary library result; list-based encoding of the source recursive predicate."
     - source: "Karamata.v: Karamata_inequality"
       lean: "CSeparatedNPComplete.Karamata_inequality"
       module: "Solution"
       status: "proved"
-      note: "All finite dimensions; convex predicate domain; descending majorization."
-    - source: "sepsolve.v: partition_gadget_schedule_partition_iff"
-      lean: ""
-      module: ""
-      status: "not-formalized"
-      note: "The intended later milestone; its source proof uses direct reciprocal inequalities."
+      note: "Auxiliary library result; all finite dimensions, convex predicate domain, descending majorization."
+    - source: "sepsolve.v:2782, partition_gadget_schedule_partition_iff"
+      lean: "CSeparatedNPComplete.partition_gadget_schedule_partition_iff"
+      module: "Solution"
+      status: "proved"
+      note: "Sole compared theorem; preserves the pointwise equivalence and selector-dependent threshold."
 
 acknowledgements: "Lean 4, Mathlib, Rocq source development, and Palomar Registry guidance."

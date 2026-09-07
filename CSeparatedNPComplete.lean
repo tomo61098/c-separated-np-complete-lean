@@ -1,1 +1,2 @@
 import CSeparatedNPComplete.Karamata
+import CSeparatedNPComplete.Partition

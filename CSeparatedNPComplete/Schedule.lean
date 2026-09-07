@@ -208,8 +208,8 @@ theorem gaussian_schedule_hinge_form_prefix_m_ge_2 {n : ℕ} (k : ℕ) {m c : �
   | succ k ih =>
     rw [gaussian_schedule_snoc, hinge_form_snoc, ih,
       hinge_to_gaussian_schedule_last a hm hc ha hsum (Nat.succ_pos k)]
-    simp only [gaussian_schedule_hinge_correction, Finset.sum_range_succ, Nat.cast_add,
-      Nat.cast_one, Nat.cast_succ, Nat.succ_eq_add_one]
+    simp only [gaussian_schedule_hinge_correction, Finset.sum_range_succ,
+      Nat.cast_succ, Nat.succ_eq_add_one]
     ring
 
 end CSeparatedNPComplete

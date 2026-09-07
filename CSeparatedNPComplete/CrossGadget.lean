@@ -215,7 +215,7 @@ theorem second_gadget_schedule_hinge_form_app {n : ℕ} (m c : ℝ) (a s : Vec n
   intro h hh
   obtain ⟨j, hj, rfl⟩ := List.mem_map.mp hh
   have hjn : j < n := List.mem_range.mp hj
-  simp only [second_gadget_instance, List.mem_cons, List.mem_singleton] at hg
+  simp only [second_gadget_instance, List.mem_cons, List.not_mem_nil, or_false] at hg
   rcases hg with rfl | rfl | rfl
   · exact cross_pair_one hm hc ha hsum hjn
   · exact cross_pair_two hm hc ha hsum hjn
