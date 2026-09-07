@@ -1,0 +1,84 @@
+name: Submission checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  metadata:
+    name: Palomar metadata and license
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Check out the pinned Palomar metadata validator
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: PalomarRegistry/PalomarSubmission
+          ref: c605f23466450a52999fcfb3c6d68ed8febc56bf
+          path: .cache/palomar-policy
+          persist-credentials: false
+      - name: Install the validator's pinned dependencies
+        run: |
+          python3 -m venv .cache/metadata-venv
+          .cache/metadata-venv/bin/python -m pip install --require-hashes -r .cache/palomar-policy/requirements.txt
+      - name: Validate submission metadata and repository layout
+        run: .cache/metadata-venv/bin/python scripts/validate-submission.py --policy-root .cache/palomar-policy
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
+        with:
+          ruby-version: "3.3.12"
+      - name: Detect the license using Palomar's detector
+        run: |
+          gem install licensee --version 10.0.0 --no-document
+          ruby .cache/palomar-policy/scripts/detect_license.rb . > "$RUNNER_TEMP/license.json"
+          python3 - "$RUNNER_TEMP/license.json" <<'PY'
+          import json, sys
+          from pathlib import Path
+          licenses = json.loads(Path(sys.argv[1]).read_text())["licenses"]
+          assert [license["spdx_id"] for license in licenses] == ["Apache-2.0"], licenses
+          PY
+
+  build:
+    name: Lean build, statement comparison, and axiom audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+        with:
+          build: true
+      - name: Audit the main theorem and independent definitions
+        run: lake env lean --run scripts/Audit.lean
+
+  comparator:
+    name: Comparator and NanoDa replay
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+        with:
+          build: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: "1.24.0"
+          cache: false
+      - name: Enable the sandbox wrapper
+        run: chmod +x scripts/landrun-wrapper.sh
+      - name: Run the pinned Comparator toolchain
+        run: bash scripts/verify-comparator.sh

@@ -21,7 +21,7 @@ classification:
 
 sources:
   - title: "On the NP-Hardness of Feature-Weighted Gaussian c-Separation with Relaxed Selection"
-    type: "unpublished manuscript"
+    type: "paper"
     relationship: "adapts"
     id: "c_separation_NP_completness-4.pdf"
     location: "Introduction; partition gadget and binary-well construction"
@@ -37,7 +37,7 @@ sources:
       - "Domagoj Ševerdija"
       - "Domagoj Matijević"
       - "Stefan Canzar"
-    type: "conference paper"
+    type: "paper"
     relationship: "background"
     id: "https://doi.org/10.1007/978-3-031-90252-9_53"
     location: "Research in Computational Molecular Biology, RECOMB 2025, LNCS 15647, pp. 424–427"
@@ -46,7 +46,7 @@ sources:
       formulation, cited as reference 1 in the manuscript. This is not the
       source of the relaxed gadget equivalence formalized here.
   - title: "The accompanying Rocq development in this repository"
-    type: "formalization"
+    type: "other"
     relationship: "adapts"
     id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v#L2782"
     location: "RocqOld/sepsolve.v:2782, partition_gadget_schedule_partition_iff"
@@ -54,7 +54,7 @@ sources:
       Direct reference for the main theorem's hypotheses, construction, and
       conclusion, including its selector-dependent threshold.
   - title: "Karamata's inequality in the accompanying Rocq development"
-    type: "formalization"
+    type: "other"
     relationship: "adapts"
     location: "RocqOld/Karamata.v: Karamata_inequality"
     note: >-
@@ -88,7 +88,7 @@ status:
       comparator_config: "comparator.json"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      verification_status: "Lean build and axiom audit passed; full Comparator verification pending"
+      verification_status: "Lean build, independent statement and definition comparison, and axiom audit passed; full Comparator verification pending"
 
 automation:
   methods:
@@ -139,9 +139,13 @@ review:
     Auxiliary Karamata and gadget proofs passed local Lean checks. Karamata
     examples covered empty vectors, identical vectors, and a closed interval
     with shared coordinates. Agents reviewed source fidelity and manuscript
-    context. Main-theorem build and axiom inspection passed. Independent
-    statement comparison for the main theorem remains pending. No independent human mathematical
-    review, full Comparator verification, or Palomar submission has occurred.
+    context. Main-theorem build and axiom inspection passed. A local audit
+    imported Challenge and Solution into separate environments and checked
+    exact equality of the main theorem types and 42 definition bodies.
+    The Solution does not import Challenge. Palomar's pinned metadata validator
+    currently reports only the missing human authors and responsible maintainers.
+    CI includes full Comparator and NanoDa replay, but that job has not yet run.
+    No independent human mathematical review or Palomar submission has occurred.
 
 alignment:
   namespace: "CSeparatedNPComplete"

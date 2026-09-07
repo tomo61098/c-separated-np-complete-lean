@@ -40,6 +40,13 @@ equivalence. Polynomial construction size and running time, NP-hardness
 or NP membership of a decision problem, and the manuscript's LP and PTAS
 results are outside its scope.
 
+Here a Gaussian class is represented by its mean and diagonal covariance
+vectors; the theorem does not construct probability measures. Zero input
+coordinates are allowed, so individual covariance coordinates may vanish.
+Real division uses Lean's total convention `D / 0 = 0`; the proof handles
+the gadget's denominators under the stated hypotheses. No novelty claim is
+made for the mathematical result.
+
 The proof combines the gadget equality, vanishing interactions with the
 schedule, an exact schedule objective formula, and the reciprocal bound
 `1/(1+x) ≤ 1-x/2` on `[0,1]`, whose equality case forces binary
@@ -64,6 +71,7 @@ uses the direct reciprocal inequality from the Rocq proof.
 
 ```text
 lake build
+lake env lean --run scripts/Audit.lean
 ```
 
 The main theorem is proved in `CSeparatedNPComplete/Partition.lean`, and
@@ -76,6 +84,15 @@ Deliberate Challenge `sorry` placeholders are permitted by the
 [Palomar submission guide](https://palomar-registry.org/how-to-submit);
 solution proofs must be complete and independent of Challenge.
 
+The local audit also passes: the independent main-theorem types and all 42
+checked definition bodies match, and Solution does not import Challenge.
 Local Lean checks of the auxiliary Karamata and gadget results have passed.
 The development uses AI assistance. Independent human mathematical review,
 full Comparator verification, and Palomar submission have not occurred.
+
+The repository is licensed under [Apache-2.0](LICENSE). The
+[verification scripts](scripts/README.md) and GitHub Actions workflow provide
+reproducible submission checks. Follow [SUBMISSION.md](SUBMISSION.md) to
+select a verified, pushed commit and submit it at
+<https://submit.palomar-registry.org/>. Required human authorship and
+maintainer names still await confirmation.
