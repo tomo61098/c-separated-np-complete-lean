@@ -3,7 +3,7 @@
 This repository translates the accompanying Rocq development to Lean 4.
 Its submission target is
 `CSeparatedNPComplete.partition_gadget_schedule_partition_iff`, the final
-theorem in [sepsolve.v, line 2782](sepsolve.v#L2782). The motivation is to
+theorem in [sepsolve.v, line 2782](RocqOld/sepsolve.v#L2782). The motivation is to
 select a small set of marker genes that separates Gaussian models of cell
 types, and to understand the effect of allowing fractional feature weights.
 
@@ -43,7 +43,7 @@ results are outside its scope.
 The proof combines the gadget equality, vanishing interactions with the
 schedule, an exact schedule objective formula, and the reciprocal bound
 `1/(1+x) ≤ 1-x/2` on `[0,1]`, whose equality case forces binary
-coordinates. The `.v` files provide reference proofs and are not compiled
+coordinates. The `.v` files in `RocqOld/` provide reference proofs and are not compiled
 by the Lean project.
 
 ## Auxiliary library results

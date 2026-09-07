@@ -12,7 +12,7 @@ weights in the unit cube under a fixed cardinality constraint. Its three-class
 gadget enforces the partition balance; the schedule's reciprocal correction is
 tight only at binary selectors.
 
-This file proves the exact pointwise equivalence in `sepsolve.v:2782`. The
+This file proves the exact pointwise equivalence in `RocqOld/sepsolve.v:2782`. The
 threshold depends on the selector's coordinate zero. A fixed-threshold complexity
 reduction and its encoding bounds are not asserted by this theorem.
 -/
@@ -21,7 +21,7 @@ namespace CSeparatedNPComplete
 
 /-- The explicit Gaussian construction satisfies its threshold constraint exactly
 for equal-cardinality partition selectors. This is the main submission result,
-corresponding to `sepsolve.v:partition_gadget_schedule_partition_iff`.
+corresponding to `RocqOld/sepsolve.v:partition_gadget_schedule_partition_iff`.
 
 For `2*d` perfect-square entries with half-total at least one and `d > 1`, the
 left side allows every selector in the unit cube with total weight `d`. The

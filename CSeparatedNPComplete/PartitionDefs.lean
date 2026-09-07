@@ -2,7 +2,7 @@ import CSeparatedNPComplete.Definitions
 import Mathlib.Analysis.Real.Sqrt
 
 /-!
-The Gaussian construction of `sepsolve.v`, using functions for vectors and lists
+The Gaussian construction of `RocqOld/sepsolve.v`, using functions for vectors and lists
 for Gaussian collections. Finite sums replace the source's scalar recursion;
 the schedule covariance is factored as in `gaussian_schedule_sigma_sum_factor`.
 -/

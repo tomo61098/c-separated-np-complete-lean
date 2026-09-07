@@ -49,14 +49,14 @@ sources:
     type: "formalization"
     relationship: "adapts"
     id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v#L2782"
-    location: "sepsolve.v:2782, partition_gadget_schedule_partition_iff"
+    location: "RocqOld/sepsolve.v:2782, partition_gadget_schedule_partition_iff"
     note: >-
       Direct reference for the main theorem's hypotheses, construction, and
       conclusion, including its selector-dependent threshold.
   - title: "Karamata's inequality in the accompanying Rocq development"
     type: "formalization"
     relationship: "adapts"
-    location: "Karamata.v: Karamata_inequality"
+    location: "RocqOld/Karamata.v: Karamata_inequality"
     note: >-
       The Lean proof follows the secant-slope and summation-by-parts argument,
       replacing source infrastructure with Mathlib convexity, monotone
@@ -66,7 +66,7 @@ related_formalizations:
   - id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v"
     relationship: "adapts"
     note: "The accompanying Rocq gadget, schedule, and final equivalence proofs."
-  - id: "Karamata.v"
+  - id: "RocqOld/Karamata.v"
     relationship: "adapts"
     note: "The accompanying Rocq proof is the source of the Lean Karamata translation."
 
@@ -106,9 +106,9 @@ automation:
       framework: "Codex"
       tool_setup: "Local Mathlib source inspection, collaborative proof development, and Lean builds"
       prompting_notes: >-
-        Translate the final equivalence in sepsolve.v and its Gaussian
+        Translate the final equivalence in RocqOld/sepsolve.v and its Gaussian
         construction. Prove general Karamata inequality using as much
-        Mathlib as possible, with Karamata.v as a reference. Use the manuscript
+        Mathlib as possible, with RocqOld/Karamata.v as a reference. Use the manuscript
         for mathematical context and preserve the source scope.
   spend_usd: "not tracked"
   notes: >-
@@ -146,17 +146,17 @@ review:
 alignment:
   namespace: "CSeparatedNPComplete"
   statements:
-    - source: "sepsolve.v: initial c_separates zero-selector goal"
+    - source: "RocqOld/sepsolve.v: initial c_separates zero-selector goal"
       lean: "CSeparatedNPComplete.c_separates_zero"
       module: "Solution"
       status: "proved"
       note: "Auxiliary library result; list-based encoding of the source recursive predicate."
-    - source: "Karamata.v: Karamata_inequality"
+    - source: "RocqOld/Karamata.v: Karamata_inequality"
       lean: "CSeparatedNPComplete.Karamata_inequality"
       module: "Solution"
       status: "proved"
       note: "Auxiliary library result; all finite dimensions, convex predicate domain, descending majorization."
-    - source: "sepsolve.v:2782, partition_gadget_schedule_partition_iff"
+    - source: "RocqOld/sepsolve.v:2782, partition_gadget_schedule_partition_iff"
       lean: "CSeparatedNPComplete.partition_gadget_schedule_partition_iff"
       module: "Solution"
       status: "proved"

@@ -33,7 +33,7 @@ theorem c_separates_zero (n : Nat) (c : Real) (l : List (Gaussian n)) :
       · exact ih
 
 /-- Karamata's inequality for every finite dimension, including zero.
-This is the predicate-domain formulation of `Karamata.v:Karamata_inequality`. -/
+This is the predicate-domain formulation of `RocqOld/Karamata.v:Karamata_inequality`. -/
 theorem Karamata_inequality
     (n : Nat) (P : Real → Prop) (f : Real → Real) (u v : Vec n)
     (hconv : convexOnPredicate P f)

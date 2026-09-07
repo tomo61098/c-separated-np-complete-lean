@@ -13,7 +13,7 @@ when binary feature selection is relaxed to weights in the unit cube, and cites
 Borozan et al., *Optimal Marker Genes for c-Separated Cell Types* (RECOMB 2025),
 as the source of the Gaussian c-separation model.
 
-The theorem below is the pointwise gadget equivalence from `sepsolve.v:2782`.
+The theorem below is the pointwise gadget equivalence from `RocqOld/sepsolve.v:2782`.
 A three-class gadget enforces the partition balance, and a Gaussian schedule
 forces the relaxed selector to be binary at the stated bound. The threshold
 explicitly depends on the selector; this statement does not assert a
