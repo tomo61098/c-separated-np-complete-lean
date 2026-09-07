@@ -9,16 +9,16 @@ and the independent [Challenge.lean](Challenge.lean) for the mathematical scope.
 Local checks on 2026-09-07 passed: the full Lean build, equality of the
 independent theorem types and 42 definition bodies, the standard-three-axiom
 audit, and Solution's independence from Challenge. The pinned Palomar metadata
-validator reports only the missing human authors and responsible maintainers.
+validator and repository submission preflight also pass. Tomislav Prusina
+is recorded as the author and responsible maintainer.
 Full Comparator/NanoDa replay and submission have not yet occurred.
 
 Before selecting the final snapshot:
 
-1. Fill `project.authors` and `project.responsible_maintainers` in
-   [formalization.yaml](formalization.yaml) with confirmed human names. Update
-   the pending-authorship notes in that file and the README. Credit the
-   unpublished manuscript and original Rocq proofs when their authorship is
-   confirmed; do not copy the PDF's template author block.
+1. Review [formalization.yaml](formalization.yaml). Tomislav Prusina is the
+   confirmed author and responsible maintainer. Source authorship for the
+   unpublished manuscript remains unspecified; its template author block
+   is not a bibliographic attribution.
 2. Run `lake build` and `lake env lean --run scripts/Audit.lean`.
 3. Commit and push the changes, then require all three jobs in
    [Submission checks](https://github.com/tomo61098/c-separated-np-complete-lean/actions/workflows/ci.yml)

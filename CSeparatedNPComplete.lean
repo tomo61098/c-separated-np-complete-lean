@@ -1,2 +1,4 @@
 import CSeparatedNPComplete.Karamata
-import CSeparatedNPComplete.Partition
+import CSeparatedNPComplete.CrossGadget
+import CSeparatedNPComplete.Gadget
+import CSeparatedNPComplete.Reciprocal

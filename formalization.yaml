@@ -6,14 +6,14 @@ project:
     A Lean 4 translation of the pointwise equivalence between a Gaussian
     gadget-and-schedule hinge bound and equal-cardinality partition of
     perfect-square inputs. The threshold depends on the selector. General
-    Karamata inequality and the zero-selector lemma are auxiliary results.
-  authors: []
+    Karamata inequality is the sole auxiliary theorem stated in Solution.lean.
+  authors: ["Tomislav Prusina"]
   license: "Apache-2.0"
-  responsible_maintainers: []
+  responsible_maintainers: ["Tomislav Prusina"]
   authorship_note: >-
-    Actual formalization authors and responsible maintainers await user
-    confirmation before submission. The manuscript's template author block
-    has not been copied as a bibliographic attribution.
+    Tomislav Prusina is the formalization author and responsible maintainer,
+    as confirmed by the user. The manuscript's template author block has not
+    been copied as a bibliographic attribution.
 
 classification:
   arxiv: ["cs.LO", "cs.CC"]
@@ -84,7 +84,7 @@ status:
   axioms: ["propext", "Classical.choice", "Quot.sound"]
   main_results:
     - declaration: "CSeparatedNPComplete.partition_gadget_schedule_partition_iff"
-      file: "CSeparatedNPComplete/Partition.lean"
+      file: "Solution.lean"
       comparator_config: "comparator.json"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -143,18 +143,14 @@ review:
     imported Challenge and Solution into separate environments and checked
     exact equality of the main theorem types and 42 definition bodies.
     The Solution does not import Challenge. Palomar's pinned metadata validator
-    currently reports only the missing human authors and responsible maintainers.
+    and the repository submission preflight pass with the confirmed author
+    and responsible maintainer.
     CI includes full Comparator and NanoDa replay, but that job has not yet run.
     No independent human mathematical review or Palomar submission has occurred.
 
 alignment:
   namespace: "CSeparatedNPComplete"
   statements:
-    - source: "RocqOld/sepsolve.v: initial c_separates zero-selector goal"
-      lean: "CSeparatedNPComplete.c_separates_zero"
-      module: "Solution"
-      status: "proved"
-      note: "Auxiliary library result; list-based encoding of the source recursive predicate."
     - source: "RocqOld/Karamata.v: Karamata_inequality"
       lean: "CSeparatedNPComplete.Karamata_inequality"
       module: "Solution"

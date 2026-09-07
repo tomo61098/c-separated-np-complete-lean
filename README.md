@@ -17,7 +17,7 @@ Stefan Canzar,
 RECOMB 2025, pp. 424–427. This published article supplies background; the
 local manuscript and Rocq development supply the translated construction.
 The manuscript's template author block is not used as an attribution.
-Formalization authors and responsible maintainers await confirmation.
+The formalization author and responsible maintainer is Tomislav Prusina.
 
 ## Main statement and scope
 
@@ -55,9 +55,9 @@ by the Lean project.
 
 ## Auxiliary library results
 
-The library also proves `c_separates_zero` and general
-`Karamata_inequality`. These are auxiliary results, not separate submission
-targets. Karamata holds in every finite dimension for convex functions on
+`Solution.lean` also proves the general `Karamata_inequality` as its only
+auxiliary theorem; it is not a separate submission target.
+Karamata holds in every finite dimension for convex functions on
 convex domains. Here `majorized u v` means that descending `u` majorizes
 descending `v`, so the sum of `f` over `u` is at least its sum over `v`.
 
@@ -74,11 +74,11 @@ lake build
 lake env lean --run scripts/Audit.lean
 ```
 
-The main theorem is proved in `CSeparatedNPComplete/Partition.lean`, and
+The main theorem is proved directly in `Solution.lean`, and
 `lake build` passes. Its axiom dependencies are exactly `propext`,
 `Classical.choice`, and `Quot.sound`. The Comparator package contains one
 compared theorem, `partition_gadget_schedule_partition_iff`, with an
-independent `Challenge.lean` statement and a proof imported by `Solution.lean`.
+independent `Challenge.lean` statement and a proof in `Solution.lean`.
 The definitions are explicit, so `definition_names` is empty.
 Deliberate Challenge `sorry` placeholders are permitted by the
 [Palomar submission guide](https://palomar-registry.org/how-to-submit);
@@ -94,5 +94,4 @@ The repository is licensed under [Apache-2.0](LICENSE). The
 [verification scripts](scripts/README.md) and GitHub Actions workflow provide
 reproducible submission checks. Follow [SUBMISSION.md](SUBMISSION.md) to
 select a verified, pushed commit and submit it at
-<https://submit.palomar-registry.org/>. Required human authorship and
-maintainer names still await confirmation.
+<https://submit.palomar-registry.org/>.

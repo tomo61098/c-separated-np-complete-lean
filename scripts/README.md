@@ -13,8 +13,8 @@ Challenge. It is a local preflight, not Comparator or independent kernel replay.
 
 The GitHub Actions workflow runs the build and this audit, metadata validation
 using Palomar's own pinned validator, license detection, and full Comparator
-with NanoDa replay. The metadata job deliberately fails while required author
-and maintainer fields are empty.
+with NanoDa replay. The metadata job checks required authorship and maintainer
+fields along with the other submission metadata.
 
 On Linux with Lean/Elan, Git, Python 3, Cargo, and Go installed, run:
 
