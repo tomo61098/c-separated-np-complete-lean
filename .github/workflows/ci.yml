@@ -32,7 +32,7 @@ jobs:
       - name: Install the validator's pinned dependencies
         run: |
           python3 -m venv .cache/metadata-venv
-          .cache/metadata-venv/bin/python -m pip install --require-hashes -r .cache/palomar-policy/requirements.txt
+          .cache/metadata-venv/bin/python -m pip install --require-hashes -r scripts/requirements-metadata.txt
       - name: Validate submission metadata and repository layout
         run: .cache/metadata-venv/bin/python scripts/validate-submission.py --policy-root .cache/palomar-policy
       - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
@@ -67,13 +67,25 @@ jobs:
     name: Comparator and NanoDa replay
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    env:
+      MATHLIB_NO_CACHE_ON_UPDATE: "1"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: Free space for both Lean toolchains and proof exports
+        if: runner.environment == 'github-hosted'
+        run: |
+          df -h "$GITHUB_WORKSPACE"
+          # These preinstalled SDKs are unused by this job on its disposable VM.
+          sudo rm -rf -- /usr/local/lib/android /usr/share/dotnet
+          df -h "$GITHUB_WORKSPACE"
       - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
         with:
           build: false
+          # The replay script fetches only this project's Mathlib imports.
+          use-mathlib-cache: "false"
+          use-github-cache: "false"
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
         with:
           go-version: "1.24.0"

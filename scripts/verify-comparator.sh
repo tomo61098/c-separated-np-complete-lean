@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Fetch the project cache explicitly below, after the verification tools build.
+export MATHLIB_NO_CACHE_ON_UPDATE=1
+
 repository_root=$(cd "$(dirname "$0")/.." && pwd)
 cache_root=${PALOMAR_COMPARATOR_CACHE:-"$repository_root/.cache/palomar-comparator"}
 bin_dir="$cache_root/bin"
@@ -82,7 +85,31 @@ GOBIN="$bin_dir" go install "github.com/zouuup/landrun/cmd/landrun@$landrun_comm
 (cd "$nanoda_dir" && cargo build --release --locked)
 
 cd "$repository_root"
-lake exe cache get
+# With no module arguments, Mathlib downloads its entire library. Collect this
+# project's direct Mathlib imports; cache get includes their transitive imports.
+python3 - "$repository_root" <<'PY'
+import pathlib
+import re
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1])
+sources = [root / name for name in ("Challenge.lean", "Solution.lean", "CSeparatedNPComplete.lean")]
+sources.extend(sorted((root / "CSeparatedNPComplete").rglob("*.lean")))
+modules = sorted({
+    match.group(1)
+    for source in sources
+    for match in re.finditer(
+        r"^import\s+(Mathlib(?:\.[A-Za-z0-9_']+)*)\s*$",
+        source.read_text(encoding="utf-8"),
+        re.MULTILINE,
+    )
+})
+if not modules:
+    raise SystemExit("error: no Mathlib imports found; refusing a full-library cache download")
+print(f"Fetching cache for {len(modules)} Mathlib imports and their dependencies", flush=True)
+subprocess.run(["lake", "exe", "cache", "get", *modules], cwd=root, check=True)
+PY
 PALOMAR_LANDRUN_BIN="$bin_dir/landrun" \
 COMPARATOR_LEAN4EXPORT="$lean4export_dir/.lake/build/bin/lean4export" \
 COMPARATOR_NANODA="$nanoda_dir/target/release/nanoda_bin" \

@@ -29,18 +29,34 @@ match and leaves NanoDa enabled. Its default download directory is the ignored
 `.cache/palomar-comparator/`. Landrun requires Linux; Git Bash on Windows cannot
 provide the full replay environment.
 
-`verify-comparator.sh` and `landrun-wrapper.sh` were copied unchanged from
+The pinned Comparator builds with Lean 4.33.0-rc1, while the project and its
+exporter use Lean 4.32.0. Both installations are required by these tool pins.
+The Comparator CI job frees space by removing the unused Android and .NET
+SDKs from its disposable GitHub-hosted runner before installing Lean. It also
+disables automatic full Mathlib cache downloads and restores. The replay
+script downloads only the project's direct Mathlib imports and their
+transitive dependencies, after building the verification tools.
+
+`verify-comparator.sh` and `landrun-wrapper.sh` originated from
 [PalomarTemplate at 128a6c5ce5f48622e69927ccd639cbff401022e8](https://github.com/PalomarRegistry/PalomarTemplate/tree/128a6c5ce5f48622e69927ccd639cbff401022e8/scripts),
-under Apache-2.0. The repository's full Apache license text also comes from
+under Apache-2.0. The replay script now limits Mathlib caching as described
+above; the wrapper and verification tool pins are unchanged.
+The repository's full Apache license text also comes from
 that snapshot. CI pins the metadata validator to
 [PalomarSubmission at c605f23466450a52999fcfb3c6d68ed8febc56bf](https://github.com/PalomarRegistry/PalomarSubmission/tree/c605f23466450a52999fcfb3c6d68ed8febc56bf).
 When updating Lean or verification tools, review these pins together.
 
+CI installs the validator's dependencies from `scripts/requirements-metadata.txt`
+with hash verification enabled. This retains upstream's PyYAML 6.0.3 pin and
+hashes and adds the published hash for the CPython 3.12 Linux x86_64 wheel,
+which the pinned upstream requirements omit. The added hash was checked
+against PyPI's release metadata and the downloaded wheel.
+
 To run the metadata preflight locally, check out that PalomarSubmission
-revision outside the tracked project files, install its `requirements.txt`,
-and run:
+revision outside the tracked project files, then run:
 
 ```text
+python -m pip install --require-hashes -r scripts/requirements-metadata.txt
 python scripts/validate-submission.py --policy-root PATH_TO_PALOMAR_SUBMISSION
 ```
 
