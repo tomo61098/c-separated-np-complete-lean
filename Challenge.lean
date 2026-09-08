@@ -8,10 +8,10 @@ import Mathlib.Analysis.Real.Sqrt
 Selecting a small set of marker genes that jointly distinguishes cell types is
 the motivation for this formulation. Gaussian class means and diagonal covariance
 vectors describe both differences between cell types and variation within them.
-The unpublished manuscript `c_separation_NP_completness-4.pdf` asks what happens
-when binary feature selection is relaxed to weights in the unit cube, and cites
-Borozan et al., *Optimal Marker Genes for c-Separated Cell Types* (RECOMB 2025),
-as the source of the Gaussian c-separation model.
+The Gaussian c-separation feature-selection formulation is due to Borozan et al.,
+*Optimal Marker Genes for c-Separated Cell Types* (RECOMB 2025). The project's
+intended complexity statement is NP-hardness of relative Gaussian c-separation
+by feature selection. The construction below studies weights in the unit cube.
 
 The theorem below is the pointwise gadget equivalence from `RocqOld/sepsolve.v:2782`.
 A three-class gadget enforces the partition balance, and a Gaussian schedule

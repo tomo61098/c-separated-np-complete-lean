@@ -1,6 +1,8 @@
 # Palomar submission
 
-The sole compared result is
+The project's intended complexity statement is NP-hardness of feature
+selection for relative Gaussian c-separation in the formulation of Borozan
+et al. The sole currently compared result is
 `CSeparatedNPComplete.partition_gadget_schedule_partition_iff`.
 It is a pointwise equivalence with a selector-dependent threshold; the entry
 does not claim a complete NP-hardness reduction. See [README.md](README.md)
@@ -16,9 +18,8 @@ Full Comparator/NanoDa replay and submission have not yet occurred.
 Before selecting the final snapshot:
 
 1. Review [formalization.yaml](formalization.yaml). Tomislav Prusina is the
-   confirmed author and responsible maintainer. Source authorship for the
-   unpublished manuscript remains unspecified; its template author block
-   is not a bibliographic attribution.
+   confirmed author and responsible maintainer. The published formulation
+   and the original Rocq development are identified in the source metadata.
 2. Run `lake build` and `lake env lean --run scripts/Audit.lean`.
 3. Commit and push the changes, then require all three jobs in
    [Submission checks](https://github.com/tomo61098/c-separated-np-complete-lean/actions/workflows/ci.yml)

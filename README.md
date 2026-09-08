@@ -1,22 +1,23 @@
 # Gaussian separation and equal-cardinality partition
 
-This repository translates the accompanying Rocq development to Lean 4.
-Its submission target is
-`CSeparatedNPComplete.partition_gadget_schedule_partition_iff`, the final
-theorem in [sepsolve.v, line 2782](RocqOld/sepsolve.v#L2782). The motivation is to
-select a small set of marker genes that separates Gaussian models of cell
-types, and to understand the effect of allowing fractional feature weights.
+The project's main intended complexity statement is that **selecting features
+to relatively c-separate Gaussian classes, in the formulation of Borozan
+et al., is NP-hard**. Relative separation compares differences between class
+means with within-class variation. The motivation is to select a small set
+of marker genes that jointly distinguishes cell types, and to understand
+the effect of allowing fractional feature weights.
 
-The accompanying unpublished manuscript,
-[*On the NP-Hardness of Feature-Weighted Gaussian c-Separation with Relaxed
-Selection*](c_separation_NP_completness-4.pdf), supplies the mathematical
-context. Its introduction attributes the Gaussian c-separation formulation
-to Bartol Borozan, Luka Borozan, Domagoj Ševerdija, Domagoj Matijević, and
-Stefan Canzar,
+The Gaussian c-separation feature-selection formulation comes from
+Bartol Borozan, Luka Borozan, Domagoj Ševerdija, Domagoj Matijević, and Stefan Canzar,
 [*Optimal Marker Genes for c-Separated Cell Types*](https://doi.org/10.1007/978-3-031-90252-9_53),
-RECOMB 2025, pp. 424–427. This published article supplies background; the
-local manuscript and Rocq development supply the translated construction.
-The manuscript's template author block is not used as an attribution.
+RECOMB 2025, pp. 424–427.
+
+This repository translates the accompanying Rocq development to Lean 4.
+The current formalized result is the gadget equivalence
+`CSeparatedNPComplete.partition_gadget_schedule_partition_iff`, the final
+theorem in [sepsolve.v, line 2782](RocqOld/sepsolve.v#L2782). It is the sole
+Palomar submission target. The full NP-hardness reduction is not yet
+formalized; the exact proved statement and its scope are described below.
 The formalization author and responsible maintainer is Tomislav Prusina.
 
 ## Main statement and scope
@@ -37,8 +38,8 @@ three-class partition gadget and a schedule of `2*d` classes. Writing
 `c*k*(k+1)/2 - (3*d/2 - 1/(1+a₀))`. This threshold depends on the
 selector's zeroth coordinate. The formalization concerns this pointwise
 equivalence. Polynomial construction size and running time, NP-hardness
-or NP membership of a decision problem, and the manuscript's LP and PTAS
-results are outside its scope.
+or NP membership of a decision problem, and approximation guarantees are
+outside its scope.
 
 Here a Gaussian class is represented by its mean and diagonal covariance
 vectors; the theorem does not construct probability measures. Zero input

@@ -3,9 +3,11 @@ import CSeparatedNPComplete
 /-!
 # The partition gadget and Gaussian schedule equivalence
 
-The unpublished manuscript `c_separation_NP_completness-4.pdf` motivates Gaussian
-separation by selecting marker genes that distinguish cell types while accounting
-for within-type variation. The construction below studies continuous feature
+Gaussian c-separation, in the feature-selection formulation of Borozan et al.,
+motivates selecting marker genes that distinguish cell types while accounting
+for within-type variation. The project's intended complexity statement is
+NP-hardness of this relative separation problem. The current Lean result is
+the gadget equivalence below. Its construction studies continuous feature
 weights in the unit cube under a fixed cardinality constraint. Its three-class
 gadget enforces the partition balance; the schedule's reciprocal correction is
 tight only at binary selectors.

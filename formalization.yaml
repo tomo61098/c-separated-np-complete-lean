@@ -5,31 +5,22 @@ project:
   description: >-
     A Lean 4 translation of the pointwise equivalence between a Gaussian
     gadget-and-schedule hinge bound and equal-cardinality partition of
-    perfect-square inputs. The threshold depends on the selector. General
+    perfect-square inputs, toward NP-hardness of feature selection for relative
+    Gaussian c-separation in the formulation of Borozan et al. The full
+    complexity reduction is not formalized. The threshold depends on the selector. General
     Karamata inequality is the sole auxiliary theorem stated in Solution.lean.
   authors: ["Tomislav Prusina"]
   license: "Apache-2.0"
   responsible_maintainers: ["Tomislav Prusina"]
   authorship_note: >-
     Tomislav Prusina is the formalization author and responsible maintainer,
-    as confirmed by the user. The manuscript's template author block has not
-    been copied as a bibliographic attribution.
+    as confirmed by the user.
 
 classification:
   arxiv: ["cs.LO", "cs.CC"]
   msc2020: ["03B35", "68Q17"]
 
 sources:
-  - title: "On the NP-Hardness of Feature-Weighted Gaussian c-Separation with Relaxed Selection"
-    type: "paper"
-    relationship: "adapts"
-    id: "c_separation_NP_completness-4.pdf"
-    location: "Introduction; partition gadget and binary-well construction"
-    note: >-
-      The accompanying manuscript supplies the mathematical context.
-      Bibliographic authorship awaits confirmation; the PDF contains a
-      template author block. The formalization follows the precise Rocq
-      equivalence, not every complexity or approximation claim in the paper.
   - title: "Optimal Marker Genes for c-Separated Cell Types"
     authors:
       - "Bartol Borozan"
@@ -43,8 +34,9 @@ sources:
     location: "Research in Computational Molecular Biology, RECOMB 2025, LNCS 15647, pp. 424–427"
     note: >-
       Published background for the Gaussian c-separation feature-selection
-      formulation, cited as reference 1 in the manuscript. This is not the
-      source of the relaxed gadget equivalence formalized here.
+      formulation. Relative separation measures class mean differences against
+      within-class variation. The direct source of the gadget equivalence
+      formalized here is the accompanying Rocq development.
   - title: "The accompanying Rocq development in this repository"
     type: "other"
     relationship: "adapts"
@@ -77,8 +69,8 @@ status:
     and main-theorem axiom inspection found only the three standard axioms.
     The result is a pointwise equivalence with a selector-dependent
     threshold, in dimension 2*d with 2*d+3 Gaussian classes. NP-hardness,
-    polynomial-time encoding, NP membership, and the manuscript's LP and
-    PTAS results are outside the formalized scope.
+    polynomial-time encoding, NP membership, and approximation guarantees
+    are outside the formalized scope.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -108,8 +100,8 @@ automation:
       prompting_notes: >-
         Translate the final equivalence in RocqOld/sepsolve.v and its Gaussian
         construction. Prove general Karamata inequality using as much
-        Mathlib as possible, with RocqOld/Karamata.v as a reference. Use the manuscript
-        for mathematical context and preserve the source scope.
+        Mathlib as possible, with RocqOld/Karamata.v as a reference. Preserve
+        the source scope and explain the Gaussian feature-selection motivation.
   spend_usd: "not tracked"
   notes: >-
     The Lean translation was developed with AI assistance, including parallel
@@ -123,14 +115,12 @@ fidelity:
     covariances are factored as in the source's proved factorization. The
     main statement retains d > 1, half-total at least 1, natural-square
     coordinates, and the threshold's dependence on the zeroth selector
-    coordinate. Its Gaussian count is 2*d+3 in dimension 2*d; the manuscript's
-    introductory class-count claims do not replace the source definition.
+    coordinate. Its Gaussian count is 2*d+3 in dimension 2*d.
     Karamata's domain convexity and conditional function
     convexity are bundled as convexOnPredicate, proved equivalent to Mathlib
     ConvexOn. Equal coordinates are handled by extending secant slopes rather
     than deleting coordinates. The mathematical Karamata assumptions and
-    conclusion match the source. The full manuscript and Rocq development
-    are not covered.
+    conclusion match the source. The full Rocq development is not covered.
 
 review:
   status: "agent-reviewed"
@@ -138,7 +128,7 @@ review:
   notes: >-
     Auxiliary Karamata and gadget proofs passed local Lean checks. Karamata
     examples covered empty vectors, identical vectors, and a closed interval
-    with shared coordinates. Agents reviewed source fidelity and manuscript
+    with shared coordinates. Agents reviewed source fidelity and mathematical
     context. Main-theorem build and axiom inspection passed. A local audit
     imported Challenge and Solution into separate environments and checked
     exact equality of the main theorem types and 42 definition bodies.
