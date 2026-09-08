@@ -3,10 +3,15 @@ version: "v0.4"
 project:
   name: "Gaussian separation and equal-cardinality partition"
   description: >-
-    A Lean 4 translation of the pointwise equivalence between a Gaussian
-    gadget-and-schedule hinge bound and equal-cardinality partition of
-    perfect-square inputs, toward NP-hardness of feature selection for relative
-    Gaussian c-separation in the formulation of Borozan et al. The full
+    A Lean 4 development toward NP-hardness of feature selection for relative
+    Gaussian c-separation in the formulation of Borozan et al. The argument
+    starts from NP-completeness of equal-cardinality partition of positive
+    squares, giving integral Gaussian data via integer roots and an even
+    paired total. Three Gaussians enforce partition balance, and a schedule
+    of 2*d Gaussians enforces binary selectors. Explicit separation of the
+    two blocks makes cross-block hinge penalties vanish. On binary certificates
+    the threshold is an integer multiple of 1/2. The main proved result is the
+    pointwise gadget iff. The full
     complexity reduction is not formalized. The threshold depends on the selector.
     General Karamata inequality and an unconditional ordinary-PARTITION to
     positive-square equal-cardinality partition equivalence are auxiliary
@@ -176,6 +181,12 @@ fidelity:
     iff proves this sufficient and necessary. CERTIFICATES.md specifies the
     binary encoding and bit-cost semantics. The proof bounds this explicit
     semantics, not a compiled Turing machine or arbitrary Gaussian feasibility.
+    The integrality explanation in SQUARE_PARTITION.md applies to outputs of
+    the paired square reduction, whose total is even. The half-integer threshold
+    description applies to binary selectors. This arithmetic explanation is
+    prose, not a separate Lean integrality theorem. The implemented binary
+    forcing block is a schedule of 2*d classes, alongside the three-class
+    partition block, with all cross-block hinge penalties proved zero.
 
 review:
   status: "agent-reviewed"

@@ -128,5 +128,35 @@ The Rocq source's paired-choice lemmas are retained separately with their
 original assumptions. The strengthened construction above supplies the
 arbitrary-selector reverse direction and explicit base that those lemmas
 alone did not provide. The source is ordinary PARTITION; its selected weights
-need not have equal cardinality. This result does not by itself resolve the
-selector-dependent threshold in the separate Gaussian gadget theorem.
+need not have equal cardinality.
+
+## Why the Gaussian construction uses squares
+
+The partition gadget uses `√sᵢ` in its mean vectors. Restricting EC partition
+to square weights makes these roots integers while retaining an NP-complete
+source problem. The paired output also satisfies
+
+\[
+\sum_i(x_i^+ + x_i^-) = 2\sum_i(u_i^2+v_i^2),
+\]
+
+so `c = Σsᵢ/2` is integral. The dimension parameter `d`, schedule means
+`d^j`, separation sums `Σⱼ(d^i−d^j)²`, and scale `γ` are integers too.
+Inspection of the formulas in `PartitionDefs.lean` then shows that all
+constructed Gaussian means and diagonal covariances are integral. This is
+the arithmetic reason for first reducing to square EC partition.
+
+For a binary selector, `1/(1+a₀)` is either `1` or `1/2`. Since
+`c*k*(k+1)/2` is integral, the stated threshold
+`c*k*(k+1)/2 − 3d/2 + 1/(1+a₀)` lies in `½ℤ`. It therefore has at most
+one fractional binary digit. This assertion concerns binary certificates;
+the pointwise theorem also evaluates the threshold at fractional selectors.
+The integrality calculation here is an explanation of the formulas, not a
+separate Lean integrality theorem.
+
+Three Gaussians impose the partition equation. A schedule of `2d` Gaussians
+forces binary selection. The explicit shifts and scales separate the two
+blocks enough that every cross-block pair contributes zero hinge penalty.
+The resulting `2d+3`-class construction therefore combines the two conditions
+in the main iff. The selector-dependent threshold remains part of that
+theorem's exact statement.

@@ -8,9 +8,22 @@ motivates selecting marker genes that distinguish cell types while accounting
 for within-type variation. The project's intended complexity statement is
 NP-hardness of this relative separation problem. The current Lean result is
 the gadget equivalence below. Its construction studies continuous feature
-weights in the unit cube under a fixed cardinality constraint. Its three-class
-gadget enforces the partition balance; the schedule's reciprocal correction is
-tight only at binary selectors.
+weights in the unit cube under a fixed cardinality constraint.
+
+The proof starts from NP-completeness of equal-cardinality partition of positive
+perfect squares, obtained by reducing ordinary PARTITION. The square roots used
+in the Gaussian means are then integers. The square reduction's paired outputs
+also have even total, making c integral. Thus its Gaussian means and diagonal
+covariances are integral; on binary certificates the threshold is an integer
+multiple of 1/2.
+
+Three Gaussians enforce partition balance. A schedule of 2*d further Gaussians
+forces binary selectors through the equality case of the reciprocal bound.
+The two blocks are placed far apart by the explicit offsets and scaling, so
+all cross-block hinge penalties vanish. Their combined bound holds exactly
+when both the partition equation and binary selection hold. The implemented
+construction therefore has 2*d+3 Gaussian classes. See README.md for the proof
+overview and SQUARE_PARTITION.md for the integrality argument.
 
 The main theorem proves the exact pointwise equivalence in `RocqOld/sepsolve.v:2782`. The
 threshold depends on the selector's coordinate zero. A fixed-threshold complexity

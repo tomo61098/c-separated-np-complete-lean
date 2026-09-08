@@ -20,6 +20,42 @@ Palomar submission target. The full NP-hardness reduction is not yet
 formalized; the exact proved statement and its scope are described below.
 The formalization author and responsible maintainer is Tomislav Prusina.
 
+## Proof idea
+
+First, we prove that **equal-cardinality partition of positive perfect squares
+is NP-complete**, by reducing ordinary positive-integer PARTITION to it.
+This supplies the discrete problem encoded by the Gaussian construction.
+The square restriction has a concrete purpose: the Gaussian means contain
+`√sᵢ`, so square weights make those coordinates integral.
+
+The square reduction outputs pairs `(uᵢ+vᵢ)², (uᵢ−vᵢ)²`. Their total is
+`2*Σᵢ(uᵢ²+vᵢ²)`, hence `c = Σsᵢ/2` is also an integer. With integer `d`,
+the displayed Gaussian formulas therefore give integer means and diagonal
+covariances. On a binary certificate the threshold is an integer multiple
+of `1/2`, with at most one digit after the binary point. This integrality
+argument concerns outputs of the square reduction; the main iff allows
+more general square inputs and fractional selectors.
+
+Three Gaussians enforce the partition equation: their combined hinge penalty
+vanishes exactly when the selected weights sum to half the total. A second
+block enforces binary selectors. In the implemented construction, this block
+is a **schedule of `2d` Gaussians**. Its objective contains reciprocal terms,
+and the bound `1/(1+x) ≤ 1−x/2` is tight exactly at `x = 0` or `x = 1`.
+Attaining the required total bound forces every selector coordinate to be
+one of these endpoints.
+
+The two blocks are placed far apart using the explicit mean offsets and
+scaling. Every pair with one Gaussian in each block then has zero hinge
+penalty under the box and cardinality constraints. Their objectives add,
+so feasibility forces both partition balance and binary selection.
+Conversely, any equal-cardinality partition attains the stated bound.
+This gives the gadget iff, with `2d+3` Gaussian classes in total.
+
+The detailed square reduction and complexity argument are in
+[SQUARE_PARTITION.md](SQUARE_PARTITION.md). The polynomial certificate proof
+for the constructed Gaussian predicate is explained in
+[CERTIFICATES.md](CERTIFICATES.md).
+
 ## Main statement and scope
 
 For `d > 1`, let `s` have `2*d` coordinates, each the square of a natural
@@ -37,9 +73,10 @@ three-class partition gadget and a schedule of `2*d` classes. Writing
 `k = 2*d - 1`, its threshold is
 `c*k*(k+1)/2 - (3*d/2 - 1/(1+a₀))`. This threshold depends on the
 selector's zeroth coordinate. The formalization concerns this pointwise
-equivalence. Polynomial construction size and running time, NP-hardness
-or NP membership of a decision problem, and approximation guarantees are
-outside its scope.
+equivalence. The library additionally proves a polynomial certificate theorem
+for this constructed predicate. The complete fixed-threshold reduction,
+general Gaussian NP membership, and machine-model complexity theorems remain
+outside the formalized scope.
 
 Here a Gaussian class is represented by its mean and diagonal covariance
 vectors; the theorem does not construct probability measures. Zero input
@@ -48,10 +85,7 @@ Real division uses Lean's total convention `D / 0 = 0`; the proof handles
 the gadget's denominators under the stated hypotheses. No novelty claim is
 made for the mathematical result.
 
-The proof combines the gadget equality, vanishing interactions with the
-schedule, an exact schedule objective formula, and the reciprocal bound
-`1/(1+x) ≤ 1-x/2` on `[0,1]`, whose equality case forces binary
-coordinates. The `.v` files in `RocqOld/` provide reference proofs and are not compiled
+The `.v` files in `RocqOld/` provide reference proofs and are not compiled
 by the Lean project.
 
 ## Auxiliary library results

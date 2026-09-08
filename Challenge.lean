@@ -13,11 +13,21 @@ The Gaussian c-separation feature-selection formulation is due to Borozan et al.
 intended complexity statement is NP-hardness of relative Gaussian c-separation
 by feature selection. The construction below studies weights in the unit cube.
 
+The proof strategy starts from equal-cardinality partition of positive perfect
+squares, whose NP-completeness is established by the accompanying reduction
+from ordinary PARTITION. Squares make the roots in the Gaussian means integral.
+The paired square construction also has even total, making c integral. On its
+outputs the Gaussian means and diagonal covariances are integers, and the
+threshold on binary certificates is an integer multiple of 1/2.
+
 The theorem below is the pointwise gadget equivalence from `RocqOld/sepsolve.v:2782`.
-A three-class gadget enforces the partition balance, and a Gaussian schedule
-forces the relaxed selector to be binary at the stated bound. The threshold
-explicitly depends on the selector; this statement does not assert a
-fixed-threshold NP-hardness reduction or polynomial encoding bounds.
+Three Gaussians enforce partition balance; a schedule of 2*d Gaussians forces
+the relaxed selector to be binary through equality in the reciprocal bound.
+Explicit offsets and scaling place the two blocks far apart, making all
+cross-block hinge penalties zero. The two requirements therefore combine
+into the stated iff. There are 2*d+3 classes in the implemented construction.
+The threshold explicitly depends on the selector; this statement does not
+assert a fixed-threshold NP-hardness reduction or polynomial encoding bounds.
 
 All definitions are given independently here. Only mathlib is imported; the
 single deliberate proof placeholder belongs to the Challenge, not the Solution.

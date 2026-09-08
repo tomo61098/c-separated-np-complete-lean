@@ -8,6 +8,13 @@ It is a pointwise equivalence with a selector-dependent threshold; the entry
 does not claim a complete NP-hardness reduction. See [README.md](README.md)
 and the independent [Challenge.lean](Challenge.lean) for the mathematical scope.
 
+The proof first reduces ordinary PARTITION to equal-cardinality partition of
+positive squares. Square roots and the even total of the paired construction
+make the Gaussian data integral. Three Gaussians impose partition balance;
+a schedule of `2d` Gaussians enforces binary selectors. The two blocks are
+placed far apart so their cross-block hinge penalties vanish. On binary
+certificates the threshold is an integer multiple of `1/2`.
+
 Local checks on 2026-09-08 passed: the full Lean build, equality of the
 independent theorem types and 42 definition bodies, the standard-three-axiom
 audit, and Solution's independence from Challenge. The pinned Palomar metadata
