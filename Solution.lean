@@ -24,6 +24,10 @@ NP-completeness of positive-integer PARTITION, this gives NP-completeness of the
 square restriction by the polynomial-time argument in `SQUARE_PARTITION.md`.
 That complexity argument is mathematical prose; no machine-model NP-completeness
 theorem is asserted in Lean.
+The library also proves `PolynomialCertificate.gadget_polynomial_certificate`:
+the original gadget predicate has a `2*d`-bit certificate and a correct integer
+verifier with quadratic work in an explicit binary-arithmetic cost model.
+See `CERTIFICATES.md` for its precise scope.
 The main theorem is stated independently in `Challenge.lean`; this module does
 not import Challenge.
 -/

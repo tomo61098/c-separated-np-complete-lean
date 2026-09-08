@@ -23,13 +23,18 @@ audits passed on 2026-09-08. [SQUARE_PARTITION.md](SQUARE_PARTITION.md) supplies
 the mathematical NP-completeness argument and identifies which parts are
 formalized in Lean.
 
+The certificate theorem in [CERTIFICATES.md](CERTIFICATES.md) proves that the
+original gadget predicate has a `2d`-bit certificate, with soundness,
+completeness, and quadratic verification work in the stated bit-cost model.
+
 Before selecting the final snapshot:
 
 1. Review [formalization.yaml](formalization.yaml). Tomislav Prusina is the
    confirmed author and responsible maintainer. The published formulation
    and the original Rocq development are identified in the source metadata.
-2. Run `lake build`, `lake env lean --run scripts/Audit.lean`, and
-   `lake env lean scripts/SquarePartitionChecks.lean`.
+2. Run `lake build`, `lake env lean --run scripts/Audit.lean`,
+   `lake env lean scripts/SquarePartitionChecks.lean`, and
+   `lake env lean scripts/PolynomialCertificateChecks.lean`.
 3. Commit and push the changes, then require all three jobs in
    [Submission checks](https://github.com/tomo61098/c-separated-np-complete-lean/actions/workflows/ci.yml)
    to pass at that commit, including Comparator and NanoDa replay.

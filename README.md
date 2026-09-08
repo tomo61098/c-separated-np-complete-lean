@@ -96,16 +96,25 @@ yes-instance of ordinary PARTITION despite having no equal-cardinality
 partition. Positive yes- and no-instances and the axiom dependencies are
 checked in [scripts/SquarePartitionChecks.lean](scripts/SquarePartitionChecks.lean).
 
+The Gaussian gadget also has a proved polynomial certificate theorem,
+`PolynomialCertificate.gadget_polynomial_certificate`. Its certificate has
+exactly `2d` bits. An executable verifier checks the two integer counts and
+sums; the main iff proves soundness and completeness for the original gadget
+predicate. With binary input length `L`, Lean proves a verification-work bound
+of `128*(L+1)^2` in the explicit binary-arithmetic cost model. See
+[CERTIFICATES.md](CERTIFICATES.md) for the encoding, cost model, and scope.
+
 ## Build
 
 ```text
 lake build
 lake env lean --run scripts/Audit.lean
 lake env lean scripts/SquarePartitionChecks.lean
+lake env lean scripts/PolynomialCertificateChecks.lean
 ```
 
-The main theorem is proved directly in `Solution.lean`, and
-`lake build` passes. Its axiom dependencies are exactly `propext`,
+`Solution.lean` contains Karamata and the square and Gaussian iff results;
+their supporting proofs are in the library. The main proof's axiom dependencies are exactly `propext`,
 `Classical.choice`, and `Quot.sound`. The Comparator package contains one
 compared theorem, `partition_gadget_schedule_partition_iff`, with an
 independent `Challenge.lean` statement and a proof in `Solution.lean`.

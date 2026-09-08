@@ -5,6 +5,7 @@ After `lake build`, run:
 ```text
 lake env lean --run scripts/Audit.lean
 lake env lean scripts/SquarePartitionChecks.lean
+lake env lean scripts/PolynomialCertificateChecks.lean
 ```
 
 This imports Challenge and Solution into separate environments, compares the
@@ -18,6 +19,12 @@ exercises a first weight greater than one; its no-instance `(1,2)` rules out
 arbitrary balanced output selectors. It also checks positive-square outputs,
 the distinction between ordinary and equal-cardinality source partitions,
 and the axiom dependencies of correctness, injectivity, and size bounds.
+
+`PolynomialCertificateChecks.lean` checks the executable certificate verifier,
+its connection to the original Gaussian predicate, and the certificate-length
+and quadratic bit-work theorem dependencies. It includes positive-square
+acceptance, count and sum rejections, and a check that longer integer operands
+incur more verification work.
 
 The GitHub Actions workflow runs the build and this audit, metadata validation
 using Palomar's own pinned validator, license detection, and full Comparator

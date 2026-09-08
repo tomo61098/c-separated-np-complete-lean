@@ -12,6 +12,8 @@ project:
     positive-square equal-cardinality partition equivalence are auxiliary
     results stated in Solution.lean. The square encoding has proved injectivity
     and numerical size bounds; its NP-completeness argument is documented prose.
+    The original Gaussian gadget predicate also has a proved binary certificate
+    verifier with soundness, completeness, and quadratic work in a bit-cost model.
   authors: ["Tomislav Prusina"]
   license: "Apache-2.0"
   responsible_maintainers: ["Tomislav Prusina"]
@@ -91,9 +93,12 @@ status:
     and main-theorem axiom inspection found only the three standard axioms.
     The result is a pointwise equivalence with a selector-dependent
     threshold, in dimension 2*d with 2*d+3 Gaussian classes. For this Gaussian
-    result, NP-hardness,
-    polynomial-time encoding, NP membership, and approximation guarantees
-    are outside the formalized scope.
+    result, a 2*d-bit certificate and sound and complete integer verifier are
+    formalized, with work at most 128*(L+1)^2 in the explicit binary-arithmetic
+    cost model, where L encodes s. The input assumptions and threshold are
+    unchanged. General Gaussian NP membership, machine-model complexity theorems,
+    the full reduction's encoding bounds, and approximation guarantees are
+    outside the formalized scope.
     The auxiliary square reduction proves unconditional equivalence from ordinary
     PARTITION to equal-cardinality partition of positive squares, together with
     injectivity and numerical encoding bounds. SQUARE_PARTITION.md proves the
@@ -135,6 +140,8 @@ automation:
         they establish the requested equal-cardinality reduction. Strengthen
         the construction to reduce ordinary positive-integer PARTITION with
         an explicit base and a reverse implication for arbitrary selectors.
+        Prove a polynomial certificate for the original Gaussian gadget predicate,
+        preserving its threshold and keeping supporting results in the library.
   spend_usd: "not tracked"
   notes: >-
     The Lean translation was developed with AI assistance, including parallel
@@ -165,6 +172,10 @@ fidelity:
     Correctness, positive-square outputs, injectivity, and numerical size bounds
     are formalized. Running time, NP membership, and the NP-completeness
     consequence are proved in prose in SQUARE_PARTITION.md.
+    The certificate checker verifies equal counts and integer sums; the gadget
+    iff proves this sufficient and necessary. CERTIFICATES.md specifies the
+    binary encoding and bit-cost semantics. The proof bounds this explicit
+    semantics, not a compiled Turing machine or arbitrary Gaussian feasibility.
 
 review:
   status: "agent-reviewed"
@@ -185,6 +196,10 @@ review:
     numerical bounds passed the full build; positive yes- and no-instance checks
     and axiom audits also passed on 2026-09-08. CI includes full Comparator and NanoDa replay, but a
     successful full replay has not yet been confirmed.
+    The polynomial certificate module passed the full build. Acceptance and
+    rejection checks, bit-length-sensitive cost checks, the concrete Gaussian
+    example, and certificate axiom audits passed on 2026-09-08. The main theorem
+    and all 42 independent definition bodies still match Challenge.
     No independent human mathematical review or Palomar submission has occurred.
 
 alignment:
@@ -202,22 +217,22 @@ alignment:
       note: "Sole compared theorem; preserves the pointwise equivalence and selector-dependent threshold."
     - source: "RocqOld/Square.v: square_partition_implies_partition_for_choice"
       lean: "CSeparatedNPComplete.square_partition_implies_partition_for_choice"
-      module: "Solution"
+      module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Preserves the source's paired-choice and root-bound hypotheses."
     - source: "RocqOld/Square.v: exists_square_partition_implies_exists_partition"
       lean: "CSeparatedNPComplete.exists_square_partition_implies_exists_partition"
-      module: "Solution"
+      module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Existential implication for paired square partitions to original sum partitions."
     - source: "RocqOld/Square.v: left_decomp, with the converse derived in Lean"
       lean: "CSeparatedNPComplete.exists_square_partition_iff_exists_partition"
-      module: "Solution"
+      module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Existential equivalence for paired choices; not an unrestricted Karp reduction."
     - source: "Bridge from the Square.v construction to the sepsolve.v predicate"
       lean: "CSeparatedNPComplete.square_choice_is_ec_partition_iff"
-      module: "Solution"
+      module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Paired selectors partition the perfect-square vector iff they balance the original weights."
     - source: "Strengthened Square.v construction; SQUARE_PARTITION.md"
@@ -227,8 +242,13 @@ alignment:
       note: "Explicit base; ordinary PARTITION iff an arbitrary equal-cardinality partition of positive squares exists."
     - source: "Positive-square outputs of the strengthened construction"
       lean: "CSeparatedNPComplete.square_reduction_positive_squares"
-      module: "Solution"
+      module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Every output coordinate is a positive natural square."
+    - source: "Polynomial certificate derived from the original gadget iff; CERTIFICATES.md"
+      lean: "CSeparatedNPComplete.PolynomialCertificate.gadget_polynomial_certificate"
+      module: "CSeparatedNPComplete.PolynomialCertificate"
+      status: "proved"
+      note: "Exact binary certificate, sound and complete integer verifier, quadratic work in the explicit bit-cost model."
 
 acknowledgements: "Lean 4, Mathlib, Rocq source development, and Palomar Registry guidance."

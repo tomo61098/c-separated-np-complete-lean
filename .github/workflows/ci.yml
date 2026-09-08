@@ -64,6 +64,8 @@ jobs:
         run: lake env lean --run scripts/Audit.lean
       - name: Check paired-square partition results and their scope
         run: lake env lean scripts/SquarePartitionChecks.lean
+      - name: Check polynomial certificates and their axiom dependencies
+        run: lake env lean scripts/PolynomialCertificateChecks.lean
 
   comparator:
     name: Comparator and NanoDa replay
