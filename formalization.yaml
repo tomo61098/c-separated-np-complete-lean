@@ -7,8 +7,11 @@ project:
     gadget-and-schedule hinge bound and equal-cardinality partition of
     perfect-square inputs, toward NP-hardness of feature selection for relative
     Gaussian c-separation in the formulation of Borozan et al. The full
-    complexity reduction is not formalized. The threshold depends on the selector. General
-    Karamata inequality is the sole auxiliary theorem stated in Solution.lean.
+    complexity reduction is not formalized. The threshold depends on the selector.
+    General Karamata inequality and an unconditional ordinary-PARTITION to
+    positive-square equal-cardinality partition equivalence are auxiliary
+    results stated in Solution.lean. The square encoding has proved injectivity
+    and numerical size bounds; its NP-completeness argument is documented prose.
   authors: ["Tomislav Prusina"]
   license: "Apache-2.0"
   responsible_maintainers: ["Tomislav Prusina"]
@@ -21,6 +24,16 @@ classification:
   msc2020: ["03B35", "68Q17"]
 
 sources:
+  - title: "Reducibility Among Combinatorial Problems"
+    authors: ["Richard M. Karp"]
+    type: "paper"
+    relationship: "background"
+    id: "https://doi.org/10.1007/978-1-4684-2001-2_9"
+    location: "Complexity of Computer Computations (1972), pp. 85–103"
+    note: >-
+      Source for the known NP-completeness of ordinary positive-integer
+      PARTITION used in the mathematical complexity argument in
+      SQUARE_PARTITION.md. This complexity theorem is not imported as a Lean axiom.
   - title: "Optimal Marker Genes for c-Separated Cell Types"
     authors:
       - "Bartol Borozan"
@@ -61,6 +74,15 @@ related_formalizations:
   - id: "RocqOld/Karamata.v"
     relationship: "adapts"
     note: "The accompanying Rocq proof is the source of the Lean Karamata translation."
+  - id: "RocqOld/Square.v"
+    relationship: "adapts"
+    note: >-
+      Translates square_partition_implies_partition_for_choice and
+      exists_square_partition_implies_exists_partition. Adds the converse
+      for paired Boolean choices and connects the natural squares to the
+      existing real-vector equal-cardinality partition predicate. The separate
+      SquareReduction module strengthens this with shifted indices, an explicit
+      base, a proof for arbitrary target selectors, injectivity, and size bounds.
 
 status:
   scope: >-
@@ -68,9 +90,16 @@ status:
     The main theorem and its dependencies are proved, lake build passes,
     and main-theorem axiom inspection found only the three standard axioms.
     The result is a pointwise equivalence with a selector-dependent
-    threshold, in dimension 2*d with 2*d+3 Gaussian classes. NP-hardness,
+    threshold, in dimension 2*d with 2*d+3 Gaussian classes. For this Gaussian
+    result, NP-hardness,
     polynomial-time encoding, NP membership, and approximation guarantees
     are outside the formalized scope.
+    The auxiliary square reduction proves unconditional equivalence from ordinary
+    PARTITION to equal-cardinality partition of positive squares, together with
+    injectivity and numerical encoding bounds. SQUARE_PARTITION.md proves the
+    polynomial-time and NP-membership claims in prose and derives NP-completeness
+    from the standard PARTITION result. These complexity claims are not
+    machine-model theorems in Lean.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -102,6 +131,10 @@ automation:
         construction. Prove general Karamata inequality using as much
         Mathlib as possible, with RocqOld/Karamata.v as a reference. Preserve
         the source scope and explain the Gaussian feature-selection motivation.
+        Translate the supplied RocqOld/Square.v results and check whether
+        they establish the requested equal-cardinality reduction. Strengthen
+        the construction to reduce ordinary positive-integer PARTITION with
+        an explicit base and a reverse implication for arbitrary selectors.
   spend_usd: "not tracked"
   notes: >-
     The Lean translation was developed with AI assistance, including parallel
@@ -121,6 +154,17 @@ fidelity:
     ConvexOn. Equal coordinates are handled by extending secant slopes rather
     than deleting coordinates. The mathematical Karamata assumptions and
     conclusion match the source. The full Rocq development is not covered.
+    The Square.v translation replaces sum_upto with finite sums and retains
+    K >= 1 and a_i <= K^(2*i). The square selectors choose exactly one element
+    per pair; the original-weight sum equality does not require equal
+    cardinality. For (1,1,1,3) at K=2, the constructed squares admit a paired
+    equal-cardinality partition although the original input has no such
+    partition. The separate strengthened construction uses indices 1 through n
+    and K = 2+n+2*sum(a_i)+sum(a_i^2). It proves that every balanced square
+    selector splits all pairs, so the reduction source is ordinary PARTITION.
+    Correctness, positive-square outputs, injectivity, and numerical size bounds
+    are formalized. Running time, NP membership, and the NP-completeness
+    consequence are proved in prose in SQUARE_PARTITION.md.
 
 review:
   status: "agent-reviewed"
@@ -135,7 +179,12 @@ review:
     The Solution does not import Challenge. Palomar's pinned metadata validator
     and the repository submission preflight pass with the confirmed author
     and responsible maintainer.
-    CI includes full Comparator and NanoDa replay, but that job has not yet run.
+    The translated Square.v results and the equal-cardinality counterexample
+    passed Lean checks. Their axiom audits found only the three
+    standard axioms. The unconditional reduction, positivity, injectivity, and
+    numerical bounds passed the full build; positive yes- and no-instance checks
+    and axiom audits also passed on 2026-09-08. CI includes full Comparator and NanoDa replay, but a
+    successful full replay has not yet been confirmed.
     No independent human mathematical review or Palomar submission has occurred.
 
 alignment:
@@ -151,5 +200,35 @@ alignment:
       module: "Solution"
       status: "proved"
       note: "Sole compared theorem; preserves the pointwise equivalence and selector-dependent threshold."
+    - source: "RocqOld/Square.v: square_partition_implies_partition_for_choice"
+      lean: "CSeparatedNPComplete.square_partition_implies_partition_for_choice"
+      module: "Solution"
+      status: "proved"
+      note: "Preserves the source's paired-choice and root-bound hypotheses."
+    - source: "RocqOld/Square.v: exists_square_partition_implies_exists_partition"
+      lean: "CSeparatedNPComplete.exists_square_partition_implies_exists_partition"
+      module: "Solution"
+      status: "proved"
+      note: "Existential implication for paired square partitions to original sum partitions."
+    - source: "RocqOld/Square.v: left_decomp, with the converse derived in Lean"
+      lean: "CSeparatedNPComplete.exists_square_partition_iff_exists_partition"
+      module: "Solution"
+      status: "proved"
+      note: "Existential equivalence for paired choices; not an unrestricted Karp reduction."
+    - source: "Bridge from the Square.v construction to the sepsolve.v predicate"
+      lean: "CSeparatedNPComplete.square_choice_is_ec_partition_iff"
+      module: "Solution"
+      status: "proved"
+      note: "Paired selectors partition the perfect-square vector iff they balance the original weights."
+    - source: "Strengthened Square.v construction; SQUARE_PARTITION.md"
+      lean: "CSeparatedNPComplete.partition_iff_square_ec_partition"
+      module: "Solution"
+      status: "proved"
+      note: "Explicit base; ordinary PARTITION iff an arbitrary equal-cardinality partition of positive squares exists."
+    - source: "Positive-square outputs of the strengthened construction"
+      lean: "CSeparatedNPComplete.square_reduction_positive_squares"
+      module: "Solution"
+      status: "proved"
+      note: "Every output coordinate is a positive natural square."
 
 acknowledgements: "Lean 4, Mathlib, Rocq source development, and Palomar Registry guidance."

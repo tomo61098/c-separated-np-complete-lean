@@ -2,3 +2,7 @@ import CSeparatedNPComplete.Karamata
 import CSeparatedNPComplete.CrossGadget
 import CSeparatedNPComplete.Gadget
 import CSeparatedNPComplete.Reciprocal
+import CSeparatedNPComplete.SquarePartition
+import CSeparatedNPComplete.SquareReduction
+import CSeparatedNPComplete.SquarePartitionResults
+import CSeparatedNPComplete.PartitionEquivalence

@@ -8,19 +8,28 @@ It is a pointwise equivalence with a selector-dependent threshold; the entry
 does not claim a complete NP-hardness reduction. See [README.md](README.md)
 and the independent [Challenge.lean](Challenge.lean) for the mathematical scope.
 
-Local checks on 2026-09-07 passed: the full Lean build, equality of the
+Local checks on 2026-09-08 passed: the full Lean build, equality of the
 independent theorem types and 42 definition bodies, the standard-three-axiom
 audit, and Solution's independence from Challenge. The pinned Palomar metadata
 validator and repository submission preflight also pass. Tomislav Prusina
 is recorded as the author and responsible maintainer.
-Full Comparator/NanoDa replay and submission have not yet occurred.
+A successful full Comparator/NanoDa replay has not yet been confirmed;
+no Palomar submission has been made.
+
+The auxiliary ordinary-PARTITION reduction now has an explicit base, an
+unrestricted reverse implication, positive-square outputs, injectivity, and
+numerical size bounds. Its build, positive-instance tests, and standard-axiom
+audits passed on 2026-09-08. [SQUARE_PARTITION.md](SQUARE_PARTITION.md) supplies
+the mathematical NP-completeness argument and identifies which parts are
+formalized in Lean.
 
 Before selecting the final snapshot:
 
 1. Review [formalization.yaml](formalization.yaml). Tomislav Prusina is the
    confirmed author and responsible maintainer. The published formulation
    and the original Rocq development are identified in the source metadata.
-2. Run `lake build` and `lake env lean --run scripts/Audit.lean`.
+2. Run `lake build`, `lake env lean --run scripts/Audit.lean`, and
+   `lake env lean scripts/SquarePartitionChecks.lean`.
 3. Commit and push the changes, then require all three jobs in
    [Submission checks](https://github.com/tomo61098/c-separated-np-complete-lean/actions/workflows/ci.yml)
    to pass at that commit, including Comparator and NanoDa replay.

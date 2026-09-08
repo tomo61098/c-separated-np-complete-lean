@@ -62,6 +62,8 @@ jobs:
           build: true
       - name: Audit the main theorem and independent definitions
         run: lake env lean --run scripts/Audit.lean
+      - name: Check paired-square partition results and their scope
+        run: lake env lean scripts/SquarePartitionChecks.lean
 
   comparator:
     name: Comparator and NanoDa replay

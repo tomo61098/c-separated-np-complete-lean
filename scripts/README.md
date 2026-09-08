@@ -4,12 +4,20 @@ After `lake build`, run:
 
 ```text
 lake env lean --run scripts/Audit.lean
+lake env lean scripts/SquarePartitionChecks.lean
 ```
 
 This imports Challenge and Solution into separate environments, compares the
 main theorem's elaborated type and the Challenge's project definition bodies,
 checks the main proof's transitive axioms, and rejects a Solution that imports
 Challenge. It is a local preflight, not Comparator or independent kernel replay.
+
+`SquarePartitionChecks.lean` checks the source paired-square results and the
+unconditional ordinary-PARTITION reduction. Its positive yes-instance `(2,2)`
+exercises a first weight greater than one; its no-instance `(1,2)` rules out
+arbitrary balanced output selectors. It also checks positive-square outputs,
+the distinction between ordinary and equal-cardinality source partitions,
+and the axiom dependencies of correctness, injectivity, and size bounds.
 
 The GitHub Actions workflow runs the build and this audit, metadata validation
 using Palomar's own pinned validator, license detection, and full Comparator

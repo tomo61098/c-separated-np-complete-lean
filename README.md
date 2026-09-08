@@ -56,7 +56,7 @@ by the Lean project.
 
 ## Auxiliary library results
 
-`Solution.lean` also proves the general `Karamata_inequality` as its only
+`Solution.lean` also proves the general `Karamata_inequality` as an
 auxiliary theorem; it is not a separate submission target.
 Karamata holds in every finite dimension for convex functions on
 convex domains. Here `majorized u v` means that descending `u` majorizes
@@ -68,11 +68,40 @@ Equal coordinates are handled by extending secant slopes. No continuity,
 differentiability, or strict convexity is assumed. The main gadget theorem
 uses the direct reciprocal inequality from the Rocq proof.
 
+The paired-square results from [RocqOld/Square.v](RocqOld/Square.v) are also
+translated, including `square_partition_implies_partition_for_choice` and
+`exists_square_partition_implies_exists_partition`. The translation proves
+the converse for paired choices and connects the construction to the
+existing `perf_square_vec` and `is_ec_partition` predicates. These are
+auxiliary results; the sole Comparator target remains the Gaussian gadget
+theorem.
+
+**Equal-cardinality partition of positive perfect squares is NP-complete**
+by a polynomial-time injective reduction from ordinary positive-integer
+PARTITION. The strengthened construction uses
+`K = 2 + n + 2*Σaᵢ + Σaᵢ²` and pairs
+`(K^(n+i) ± aᵢ*K^(n−i))²` for `i = 1, …, n`.
+Every balanced output partition is proved to split each pair.
+`partition_iff_square_ec_partition` in `Solution.lean` states the unconditional
+equivalence, with no caller-supplied base bounds and no restriction on the
+target selector. Lean also proves positive-square outputs, injectivity of
+the natural-number encoding, and numerical output-size bounds.
+
+[SQUARE_PARTITION.md](SQUARE_PARTITION.md) gives the construction and the
+NP-completeness proof. The polynomial-time and NP-membership arguments are
+mathematical prose, using the standard NP-completeness of PARTITION; a
+machine-model NP-completeness theorem is not formalized in Lean. The source
+problem imposes no cardinality restriction: for example, `(1,1,1,3)` is a
+yes-instance of ordinary PARTITION despite having no equal-cardinality
+partition. Positive yes- and no-instances and the axiom dependencies are
+checked in [scripts/SquarePartitionChecks.lean](scripts/SquarePartitionChecks.lean).
+
 ## Build
 
 ```text
 lake build
 lake env lean --run scripts/Audit.lean
+lake env lean scripts/SquarePartitionChecks.lean
 ```
 
 The main theorem is proved directly in `Solution.lean`, and
