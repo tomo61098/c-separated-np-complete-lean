@@ -5,10 +5,9 @@ import CSeparatedNPComplete.WeightedSum
 /-!
 # Karamata's inequality
 
-The proof follows the secant-slope and summation-by-parts argument in `RocqOld/Karamata.v`.
+The proof uses secant slopes and summation by parts.
 Mathlib supplies convex secant monotonicity, extension of an antitone function,
-and Abel summation. Extending the slopes across equal coordinate pairs avoids
-the source's deletion and reversal of vectors.
+and Abel summation. Extending the slopes handles equal coordinate pairs.
 -/
 
 namespace CSeparatedNPComplete

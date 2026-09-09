@@ -25,11 +25,11 @@ when both the partition equation and binary selection hold. The implemented
 construction therefore has 2*d+3 Gaussian classes. See README.md for the proof
 overview and SQUARE_PARTITION.md for the integrality argument.
 
-The main theorem proves the exact pointwise equivalence in `RocqOld/sepsolve.v:2782`. The
+The main theorem proves the pointwise gadget equivalence. The
 threshold depends on the selector's coordinate zero. A fixed-threshold complexity
 reduction and its encoding bounds are not asserted by this theorem.
 The auxiliary results include general Karamata inequality and a strengthened
-square construction based on `RocqOld/Square.v`. An explicit base gives an
+square construction. An explicit base gives an
 unconditional equivalence from ordinary PARTITION to equal-cardinality partition
 of positive squares, for arbitrary target selectors. The natural-number encoding
 is injective and has proved numerical size bounds. Together with the standard
@@ -48,7 +48,7 @@ not import Challenge.
 namespace CSeparatedNPComplete
 
 /-- Karamata's inequality for every finite dimension, including zero.
-This is the predicate-domain formulation of `RocqOld/Karamata.v:Karamata_inequality`. -/
+The domain is specified by a convex predicate. -/
 theorem Karamata_inequality
     (n : Nat) (P : Real → Prop) (f : Real → Real) (u v : Vec n)
     (hconv : convexOnPredicate P f)
@@ -71,8 +71,7 @@ theorem partition_iff_square_ec_partition (n : ℕ) (a : Fin n → ℕ) :
   (SquareReduction.exists_ec_partition_iff a).symm
 
 /-- The explicit Gaussian construction satisfies its threshold constraint exactly
-for equal-cardinality partition selectors. This is the main submission result,
-corresponding to `RocqOld/sepsolve.v:partition_gadget_schedule_partition_iff`.
+for equal-cardinality partition selectors. This is the main submission result.
 
 For `2*d` perfect-square entries with half-total at least one and `d > 1`, the
 left side allows every selector in the unit cube with total weight `d`. The

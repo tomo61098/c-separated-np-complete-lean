@@ -2,7 +2,7 @@ import CSeparatedNPComplete.SquareReduction
 
 namespace CSeparatedNPComplete
 
-/-- Translation of `RocqOld/Square.v:square_partition_implies_partition_for_choice`.
+/-- A paired-square partition implies a partition of the original weights.
 The square partition here chooses exactly one square from each constructed pair. -/
 theorem square_partition_implies_partition_for_choice
     (N : ℕ) (a : ℕ → ℕ) (K : ℕ) (b : ℕ → Bool)
@@ -11,7 +11,7 @@ theorem square_partition_implies_partition_for_choice
     SquarePartition.chooseSum N a b = SquarePartition.chooseSum N a (fun i => !(b i)) :=
   (SquarePartition.for_choice_iff N a K b hK hbound).mp h
 
-/-- Translation of `RocqOld/Square.v:exists_square_partition_implies_exists_partition`.
+/-- Existence of a paired-square partition implies existence of an original-weight partition.
 The conclusion balances the original sums; it does not impose original cardinality. -/
 theorem exists_square_partition_implies_exists_partition
     (N : ℕ) (a : ℕ → ℕ) (K : ℕ)

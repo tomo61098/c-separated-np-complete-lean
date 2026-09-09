@@ -20,7 +20,7 @@ The paired square construction also has even total, making c integral. On its
 outputs the Gaussian means and diagonal covariances are integers, and the
 threshold on binary certificates is an integer multiple of 1/2.
 
-The theorem below is the pointwise gadget equivalence from `RocqOld/sepsolve.v:2782`.
+The theorem below states the pointwise gadget equivalence.
 Three Gaussians enforce partition balance; a schedule of 2*d Gaussians forces
 the relaxed selector to be binary through equality in the reciprocal bound.
 Explicit offsets and scaling place the two blocks far apart, making all

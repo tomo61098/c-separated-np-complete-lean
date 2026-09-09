@@ -1,7 +1,7 @@
 import CSeparatedNPComplete.PartitionBasic
 
 /-!
-# The paired-square construction from `RocqOld/Square.v`
+# The paired-square construction
 
 Each input weight produces two natural-number squares. A Boolean choice places
 one square from every pair on each side. Under the source's root bound, equality
@@ -18,7 +18,7 @@ namespace CSeparatedNPComplete.SquarePartition
 def plus (N : ℕ) (a : ℕ → ℕ) (K i : ℕ) : ℕ :=
   (K ^ (N + i) + a i * K ^ (N - i)) ^ 2
 
-/-- The smaller square, using natural subtraction as in the Rocq source. -/
+/-- The smaller square, using natural subtraction. -/
 def minus (N : ℕ) (a : ℕ → ℕ) (K i : ℕ) : ℕ :=
   (K ^ (N + i) - a i * K ^ (N - i)) ^ 2
 

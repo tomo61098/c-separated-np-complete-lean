@@ -1,6 +1,7 @@
 # Palomar submission
 
-The project's intended complexity statement is NP-hardness of feature
+This project develops and proves Tomislav Prusina's original reduction idea.
+Its intended complexity statement is NP-hardness of feature
 selection for relative Gaussian c-separation in the formulation of Borozan
 et al. The sole currently compared result is
 `CSeparatedNPComplete.partition_gadget_schedule_partition_iff`.
@@ -38,7 +39,7 @@ Before selecting the final snapshot:
 
 1. Review [formalization.yaml](formalization.yaml). Tomislav Prusina is the
    confirmed author and responsible maintainer. The published formulation
-   and the original Rocq development are identified in the source metadata.
+   is identified in the source metadata.
 2. Run `lake build`, `lake env lean --run scripts/Audit.lean`,
    `lake env lean scripts/SquarePartitionChecks.lean`, and
    `lake env lean scripts/PolynomialCertificateChecks.lean`.

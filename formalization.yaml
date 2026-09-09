@@ -3,7 +3,8 @@ version: "v0.4"
 project:
   name: "Gaussian separation and equal-cardinality partition"
   description: >-
-    A Lean 4 development toward NP-hardness of feature selection for relative
+    A Lean 4 proof development of Tomislav Prusina's original reduction idea
+    toward NP-hardness of feature selection for relative
     Gaussian c-separation in the formulation of Borozan et al. The argument
     starts from NP-completeness of equal-cardinality partition of positive
     squares, giving integral Gaussian data via integer roots and an even
@@ -23,8 +24,9 @@ project:
   license: "Apache-2.0"
   responsible_maintainers: ["Tomislav Prusina"]
   authorship_note: >-
-    Tomislav Prusina is the formalization author and responsible maintainer,
-    as confirmed by the user.
+    Tomislav Prusina is the author of the original reduction idea, the
+    formalization author, and the responsible maintainer, as confirmed by
+    the user.
 
 classification:
   arxiv: ["cs.LO", "cs.CC"]
@@ -55,41 +57,10 @@ sources:
     note: >-
       Published background for the Gaussian c-separation feature-selection
       formulation. Relative separation measures class mean differences against
-      within-class variation. The direct source of the gadget equivalence
-      formalized here is the accompanying Rocq development.
-  - title: "The accompanying Rocq development in this repository"
-    type: "other"
-    relationship: "adapts"
-    id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v#L2782"
-    location: "RocqOld/sepsolve.v:2782, partition_gadget_schedule_partition_iff"
-    note: >-
-      Direct reference for the main theorem's hypotheses, construction, and
-      conclusion, including its selector-dependent threshold.
-  - title: "Karamata's inequality in the accompanying Rocq development"
-    type: "other"
-    relationship: "adapts"
-    location: "RocqOld/Karamata.v: Karamata_inequality"
-    note: >-
-      The Lean proof follows the secant-slope and summation-by-parts argument,
-      replacing source infrastructure with Mathlib convexity, monotone
-      extension, and Abel summation results.
+      within-class variation. The reduction construction and its proofs are
+      this project's original contribution.
 
-related_formalizations:
-  - id: "https://github.com/tomo61098/c-separated-np-complete-lean/blob/a23591d147d2f4b105bcab6125e4a242b6e458aa/sepsolve.v"
-    relationship: "adapts"
-    note: "The accompanying Rocq gadget, schedule, and final equivalence proofs."
-  - id: "RocqOld/Karamata.v"
-    relationship: "adapts"
-    note: "The accompanying Rocq proof is the source of the Lean Karamata translation."
-  - id: "RocqOld/Square.v"
-    relationship: "adapts"
-    note: >-
-      Translates square_partition_implies_partition_for_choice and
-      exists_square_partition_implies_exists_partition. Adds the converse
-      for paired Boolean choices and connects the natural squares to the
-      existing real-vector equal-cardinality partition predicate. The separate
-      SquareReduction module strengthens this with shifted indices, an explicit
-      base, a proof for arbitrary target selectors, injectivity, and size bounds.
+related_formalizations: []
 
 status:
   scope: >-
@@ -137,11 +108,10 @@ automation:
       framework: "Codex"
       tool_setup: "Local Mathlib source inspection, collaborative proof development, and Lean builds"
       prompting_notes: >-
-        Translate the final equivalence in RocqOld/sepsolve.v and its Gaussian
-        construction. Prove general Karamata inequality using as much
-        Mathlib as possible, with RocqOld/Karamata.v as a reference. Preserve
-        the source scope and explain the Gaussian feature-selection motivation.
-        Translate the supplied RocqOld/Square.v results and check whether
+        Prove the final equivalence and its Gaussian construction in Lean.
+        Prove general Karamata inequality using as much
+        Mathlib as possible. Explain the Gaussian feature-selection motivation.
+        Prove the paired-square results in Lean and check whether
         they establish the requested equal-cardinality reduction. Strengthen
         the construction to reduce ordinary positive-integer PARTITION with
         an explicit base and a reverse implication for arbitrary selectors.
@@ -149,24 +119,22 @@ automation:
         preserving its threshold and keeping supporting results in the library.
   spend_usd: "not tracked"
   notes: >-
-    The Lean translation was developed with AI assistance, including parallel
+    The Lean proofs were developed with AI assistance, including parallel
     proof development, source review, and Lean checking. The main theorem
     is complete; independent human review remains pending.
 
 fidelity:
   divergences: >-
-    The development uses functions Fin n -> Real and lists instead of Rocq
-    Vector.t values. Scalar schedule recursions become finite sums, and
-    covariances are factored as in the source's proved factorization. The
+    The development uses functions Fin n -> Real for vectors and lists for
+    Gaussian collections. The scalar schedule uses finite sums and factored
+    covariances. The
     main statement retains d > 1, half-total at least 1, natural-square
     coordinates, and the threshold's dependence on the zeroth selector
     coordinate. Its Gaussian count is 2*d+3 in dimension 2*d.
     Karamata's domain convexity and conditional function
     convexity are bundled as convexOnPredicate, proved equivalent to Mathlib
-    ConvexOn. Equal coordinates are handled by extending secant slopes rather
-    than deleting coordinates. The mathematical Karamata assumptions and
-    conclusion match the source. The full Rocq development is not covered.
-    The Square.v translation replaces sum_upto with finite sums and retains
+    ConvexOn. Equal coordinates are handled by extending secant slopes.
+    The paired-square lemmas use finite sums and assume
     K >= 1 and a_i <= K^(2*i). The square selectors choose exactly one element
     per pair; the original-weight sum equality does not require equal
     cardinality. For (1,1,1,3) at K=2, the constructed squares admit a paired
@@ -201,7 +169,7 @@ review:
     The Solution does not import Challenge. Palomar's pinned metadata validator
     and the repository submission preflight pass with the confirmed author
     and responsible maintainer.
-    The translated Square.v results and the equal-cardinality counterexample
+    The paired-square results and the equal-cardinality counterexample
     passed Lean checks. Their axiom audits found only the three
     standard axioms. The unconditional reduction, positivity, injectivity, and
     numerical bounds passed the full build; positive yes- and no-instance checks
@@ -216,37 +184,37 @@ review:
 alignment:
   namespace: "CSeparatedNPComplete"
   statements:
-    - source: "RocqOld/Karamata.v: Karamata_inequality"
+    - source: "Karamata's inequality on a convex predicate domain"
       lean: "CSeparatedNPComplete.Karamata_inequality"
       module: "Solution"
       status: "proved"
       note: "Auxiliary library result; all finite dimensions, convex predicate domain, descending majorization."
-    - source: "RocqOld/sepsolve.v:2782, partition_gadget_schedule_partition_iff"
+    - source: "Pointwise Gaussian gadget equivalence; README.md"
       lean: "CSeparatedNPComplete.partition_gadget_schedule_partition_iff"
       module: "Solution"
       status: "proved"
       note: "Sole compared theorem; preserves the pointwise equivalence and selector-dependent threshold."
-    - source: "RocqOld/Square.v: square_partition_implies_partition_for_choice"
+    - source: "Paired-square partition implies original-weight partition"
       lean: "CSeparatedNPComplete.square_partition_implies_partition_for_choice"
       module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
-      note: "Preserves the source's paired-choice and root-bound hypotheses."
-    - source: "RocqOld/Square.v: exists_square_partition_implies_exists_partition"
+      note: "Assumes paired choices and bounds on the roots."
+    - source: "Existence of paired-square partitions implies existence of original-weight partitions"
       lean: "CSeparatedNPComplete.exists_square_partition_implies_exists_partition"
       module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Existential implication for paired square partitions to original sum partitions."
-    - source: "RocqOld/Square.v: left_decomp, with the converse derived in Lean"
+    - source: "Partition equivalence for paired Boolean choices"
       lean: "CSeparatedNPComplete.exists_square_partition_iff_exists_partition"
       module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Existential equivalence for paired choices; not an unrestricted Karp reduction."
-    - source: "Bridge from the Square.v construction to the sepsolve.v predicate"
+    - source: "Paired-square construction and the real-vector equal-cardinality partition predicate"
       lean: "CSeparatedNPComplete.square_choice_is_ec_partition_iff"
       module: "CSeparatedNPComplete.SquarePartitionResults"
       status: "proved"
       note: "Paired selectors partition the perfect-square vector iff they balance the original weights."
-    - source: "Strengthened Square.v construction; SQUARE_PARTITION.md"
+    - source: "Unrestricted square reduction; SQUARE_PARTITION.md"
       lean: "CSeparatedNPComplete.partition_iff_square_ec_partition"
       module: "Solution"
       status: "proved"
@@ -262,4 +230,4 @@ alignment:
       status: "proved"
       note: "Exact binary certificate, sound and complete integer verifier, quadratic work in the explicit bit-cost model."
 
-acknowledgements: "Lean 4, Mathlib, Rocq source development, and Palomar Registry guidance."
+acknowledgements: "Lean 4, Mathlib, and Palomar Registry guidance."

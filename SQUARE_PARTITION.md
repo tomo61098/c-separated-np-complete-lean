@@ -124,8 +124,8 @@ to compare their sums. The certificate has polynomial binary length, and
 each verification step uses polynomial-time integer arithmetic. Thus the
 target problem is in NP and is **NP-complete**.
 
-The Rocq source's paired-choice lemmas are retained separately with their
-original assumptions. The strengthened construction above supplies the
+The auxiliary paired-choice lemmas have additional assumptions.
+The strengthened construction above supplies the
 arbitrary-selector reverse direction and explicit base that those lemmas
 alone did not provide. The source is ordinary PARTITION; its selected weights
 need not have equal cardinality.

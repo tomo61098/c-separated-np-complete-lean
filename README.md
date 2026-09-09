@@ -12,12 +12,10 @@ Bartol Borozan, Luka Borozan, Domagoj Ševerdija, Domagoj Matijević, and Stefan
 [*Optimal Marker Genes for c-Separated Cell Types*](https://doi.org/10.1007/978-3-031-90252-9_53),
 RECOMB 2025, pp. 424–427.
 
-This repository translates the accompanying Rocq development to Lean 4.
-The current formalized result is the gadget equivalence
-`CSeparatedNPComplete.partition_gadget_schedule_partition_iff`, the final
-theorem in [sepsolve.v, line 2782](RocqOld/sepsolve.v#L2782). It is the sole
-Palomar submission target. The full NP-hardness reduction is not yet
-formalized; the exact proved statement and its scope are described below.
+This repository develops and proves reduction in Lean 4.
+The main Lean result is the gadget equivalence
+`CSeparatedNPComplete.partition_gadget_schedule_partition_iff`. It is the sole
+Palomar submission target. The exact proved statement and its scope are described below.
 The formalization author and responsible maintainer is Tomislav Prusina.
 
 ## Proof idea
@@ -32,7 +30,7 @@ The square reduction outputs pairs `(uᵢ+vᵢ)², (uᵢ−vᵢ)²`. Their total
 `2*Σᵢ(uᵢ²+vᵢ²)`, hence `c = Σsᵢ/2` is also an integer. With integer `d`,
 the displayed Gaussian formulas therefore give integer means and diagonal
 covariances. On a binary certificate the threshold is an integer multiple
-of `1/2`, with at most one digit after the binary point. This integrality
+of `1/2`. This integrality
 argument concerns outputs of the square reduction; the main iff allows
 more general square inputs and fractional selectors.
 
@@ -82,11 +80,9 @@ Here a Gaussian class is represented by its mean and diagonal covariance
 vectors; the theorem does not construct probability measures. Zero input
 coordinates are allowed, so individual covariance coordinates may vanish.
 Real division uses Lean's total convention `D / 0 = 0`; the proof handles
-the gadget's denominators under the stated hypotheses. No novelty claim is
-made for the mathematical result.
-
-The `.v` files in `RocqOld/` provide reference proofs and are not compiled
-by the Lean project.
+the gadget's denominators under the stated hypotheses. The original contribution
+is the reduction construction and its proofs; the Gaussian feature-selection
+formulation and standard background results are credited above and below.
 
 ## Auxiliary library results
 
@@ -100,11 +96,11 @@ The Karamata proof uses mathlib's `ConvexOn.secant_mono`,
 `AntitoneOn.exists_antitone_extension`, and `Finset.sum_range_by_parts`.
 Equal coordinates are handled by extending secant slopes. No continuity,
 differentiability, or strict convexity is assumed. The main gadget theorem
-uses the direct reciprocal inequality from the Rocq proof.
+uses the direct reciprocal inequality.
 
-The paired-square results from [RocqOld/Square.v](RocqOld/Square.v) are also
-translated, including `square_partition_implies_partition_for_choice` and
-`exists_square_partition_implies_exists_partition`. The translation proves
+The paired-square results are also
+proved in Lean, including `square_partition_implies_partition_for_choice` and
+`exists_square_partition_implies_exists_partition`. The Lean development proves
 the converse for paired choices and connects the construction to the
 existing `perf_square_vec` and `is_ec_partition` predicates. These are
 auxiliary results; the sole Comparator target remains the Gaussian gadget

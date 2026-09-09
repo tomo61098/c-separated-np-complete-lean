@@ -5,8 +5,7 @@ import CSeparatedNPComplete.Reciprocal
 namespace CSeparatedNPComplete
 
 /-- The explicit Gaussian construction satisfies its threshold constraint exactly
-for equal-cardinality partition selectors. This is the main submission result,
-corresponding to `RocqOld/sepsolve.v:partition_gadget_schedule_partition_iff`.
+for equal-cardinality partition selectors. This is the main submission result.
 
 For `2*d` perfect-square entries with half-total at least one and `d > 1`, the
 left side allows every selector in the unit cube with total weight `d`. The
