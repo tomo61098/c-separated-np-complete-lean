@@ -3,7 +3,7 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.Real.Sqrt
 
 /-!
-# Gaussian separation and equal-cardinality partition
+# NP-hardness of Gaussian c-separation
 
 Selecting a small set of marker genes that jointly distinguishes cell types is
 the motivation for this formulation. Gaussian class means and diagonal covariance

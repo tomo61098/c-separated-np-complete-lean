@@ -1,4 +1,4 @@
-# Gaussian separation and equal-cardinality partition
+# NP-hardness of Gaussian c-separation
 
 The project's main intended complexity statement is that **selecting features
 to relatively c-separate Gaussian classes, in the formulation of Borozan

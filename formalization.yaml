@@ -1,7 +1,7 @@
 version: "v0.4"
 
 project:
-  name: "Gaussian separation and equal-cardinality partition"
+  name: "NP-hardness of Gaussian c-separation"
   description: >-
     A Lean 4 proof development of Tomislav Prusina's original reduction idea
     toward NP-hardness of feature selection for relative
