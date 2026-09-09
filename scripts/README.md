@@ -8,7 +8,7 @@ lake env lean scripts/SquarePartitionChecks.lean
 lake env lean scripts/PolynomialCertificateChecks.lean
 ```
 
-This imports Challenge and Solution into separate environments, compares the
+`Audit.lean` imports Challenge and Solution into separate environments, compares the
 main theorem's elaborated type and the Challenge's project definition bodies,
 checks the main proof's transitive axioms, and rejects a Solution that imports
 Challenge. It is a local preflight, not Comparator or independent kernel replay.

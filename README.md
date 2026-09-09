@@ -12,7 +12,7 @@ Bartol Borozan, Luka Borozan, Domagoj Ševerdija, Domagoj Matijević, and Stefan
 [*Optimal Marker Genes for c-Separated Cell Types*](https://doi.org/10.1007/978-3-031-90252-9_53),
 RECOMB 2025, pp. 424–427.
 
-This repository develops and proves reduction in Lean 4.
+This repository develops and proves an original reduction construction in Lean 4.
 The main Lean result is the gadget equivalence
 `CSeparatedNPComplete.partition_gadget_schedule_partition_iff`. It is the sole
 Palomar submission target. The exact proved statement and its scope are described below.
@@ -29,8 +29,7 @@ The square restriction has a concrete purpose: the Gaussian means contain
 The square reduction outputs pairs `(uᵢ+vᵢ)², (uᵢ−vᵢ)²`. Their total is
 `2*Σᵢ(uᵢ²+vᵢ²)`, hence `c = Σsᵢ/2` is also an integer. The output
 dimension `d` is even, so `m = d/2` is integral. The displayed Gaussian
-formulas therefore give integer means and diagonal
-covariances. The fixed threshold is an integer multiple of `1/4` for all
+formulas therefore give integer means and diagonal covariances. The fixed threshold is an integer multiple of `1/4` for all
 natural input weights. The Gaussian-data integrality argument concerns
 outputs of the square reduction; the main iff allows more general square
 inputs and fractional selectors.
@@ -71,13 +70,15 @@ The construction has dimension `d` and `d+4` Gaussian classes: a
 three-class partition gadget and a schedule of `d+1` classes. Its fixed
 threshold is
 
-\[
+```math
 \frac{s^T\mathbf{1}}{2}\,\frac{d(d+1)}{2}-\frac{3d}{4}.
-\]
+```
 
-Every coordinate contributes to the schedule's reciprocal sum, whose maximum
-under the box and cardinality constraints is `3d/4`, attained exactly by
-binary selectors. Lean proves that the threshold is an integer multiple of
+Every coordinate contributes to the schedule's reciprocal sum. Under the
+box and cardinality constraints, this sum is at most `3d/4`, with equality
+exactly for binary selectors. This upper bound is attained when `d` is even.
+For odd `d`, a binary selector cannot have coordinate sum `d/2`, so both
+sides of the equivalence are false. Lean proves that the threshold is an integer multiple of
 `1/4` for natural input weights in
 `partition_schedule_threshold_quarter_integral`.
 The library additionally proves a polynomial certificate theorem for this
@@ -98,8 +99,10 @@ formulation and standard background results are credited above and below.
 `Solution.lean` also proves the general `Karamata_inequality` as an
 auxiliary theorem; it is not a separate submission target.
 Karamata holds in every finite dimension for convex functions on
-convex domains. Here `majorized u v` means that descending `u` majorizes
-descending `v`, so the sum of `f` over `u` is at least its sum over `v`.
+convex domains. Here `majorized u v` requires both vectors to already be
+sorted in descending order, with every prefix sum of `u` at least that of
+`v` and equal total sums. The sum of `f` over `u` is then at least its sum
+over `v`.
 
 The Karamata proof uses mathlib's `ConvexOn.secant_mono`,
 `AntitoneOn.exists_antitone_extension`, and `Finset.sum_range_by_parts`.
@@ -107,8 +110,7 @@ Equal coordinates are handled by extending secant slopes. No continuity,
 differentiability, or strict convexity is assumed. The main gadget theorem
 uses the direct reciprocal inequality.
 
-The paired-square results are also
-proved in Lean, including `square_partition_implies_partition_for_choice` and
+The paired-square results are also proved in Lean, including `square_partition_implies_partition_for_choice` and
 `exists_square_partition_implies_exists_partition`. The Lean development proves
 the converse for paired choices and connects the construction to the
 existing `perf_square_vec` and `is_ec_partition` predicates. These are
@@ -129,19 +131,34 @@ the natural-number encoding, and numerical output-size bounds.
 [SQUARE_PARTITION.md](SQUARE_PARTITION.md) gives the construction and the
 NP-completeness proof. The polynomial-time and NP-membership arguments are
 mathematical prose, using the standard NP-completeness of PARTITION; a
-machine-model NP-completeness theorem is not formalized in Lean. The source
-problem imposes no cardinality restriction: for example, `(1,1,1,3)` is a
-yes-instance of ordinary PARTITION despite having no equal-cardinality
-partition. Positive yes- and no-instances and the axiom dependencies are
+machine-model NP-completeness theorem is not formalized in Lean. The reduction
+maps `n` input weights to `2n` positive squares. An equal-sum partition of the
+input, whatever the sizes of its two parts, gives an equal-sum partition of
+the constructed squares with exactly `n` entries on each side. Conversely,
+every equal-cardinality partition of the constructed squares gives a partition
+of the input. Thus the construction preserves both yes- and no-instances.
+Concrete yes- and no-instances and the axiom dependencies are
 checked in [scripts/SquarePartitionChecks.lean](scripts/SquarePartitionChecks.lean).
 
-The Gaussian gadget also has a proved polynomial certificate theorem,
-`PolynomialCertificate.gadget_polynomial_certificate`. Its certificate has
-exactly `d` bits. An executable verifier checks the two integer counts and
-sums; the main iff proves soundness and completeness for the original gadget
-predicate. With binary input length `L`, Lean proves a verification-work bound
-of `128*(L+1)^2` in the explicit binary-arithmetic cost model. See
-[CERTIFICATES.md](CERTIFICATES.md) for the encoding, cost model, and scope.
+For the constructed Gaussian family under the main theorem's assumptions,
+`PolynomialCertificate.gadget_polynomial_certificate` proves that a feasible
+selector exists exactly when an accepted Boolean certificate exists. The
+certificate has exactly `d` bits, one per feature coordinate. The executable
+verifier checks that the selected and unselected coordinates have equal
+counts and equal sums of the natural weights `sᵢ`.
+
+The gadget equivalence proves both directions: every accepted certificate
+gives a selector satisfying the fixed Gaussian threshold, and every feasible
+selector is binary and supplies an accepted certificate. Verification therefore
+uses integer arithmetic; it does not require approximate real-number evaluation
+of the Gaussian objective.
+
+Let `L = 2*Σᵢ(Nat.size(sᵢ)+1)` be the length of the delimited binary encoding
+of the weight vector `s`, which determines this Gaussian instance. Lean proves
+`d ≤ L` and bounds verification work by `128*(L+1)^2` for every certificate
+in the explicit binary-arithmetic cost model. This bound measures the integer
+verifier's work. See [CERTIFICATES.md](CERTIFICATES.md) for the encoding,
+cost model, and scope.
 
 ## Build
 
@@ -162,11 +179,13 @@ Deliberate Challenge `sorry` placeholders are permitted by the
 [Palomar submission guide](https://palomar-registry.org/how-to-submit);
 solution proofs must be complete and independent of Challenge.
 
-The local audit also passes: the independent main-theorem types and all 42
+Local checks on 2026-09-09 passed: the full build, the square-partition and
+certificate checks, and the main-theorem audit. In that audit, the independent main-theorem types and all 42
 checked definition bodies match, and Solution does not import Challenge.
 Local Lean checks of the auxiliary Karamata and gadget results have passed.
-The development uses AI assistance. Independent human mathematical review,
-full Comparator verification, and Palomar submission have not occurred.
+The development uses AI assistance. Independent human mathematical review
+and Palomar submission have not been reported; successful full Comparator
+verification has not yet been confirmed.
 
 The repository is licensed under [Apache-2.0](LICENSE). The
 [verification scripts](scripts/README.md) and GitHub Actions workflow provide

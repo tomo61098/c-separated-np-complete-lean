@@ -4,7 +4,7 @@
 proves the certificate result for the original Gaussian gadget predicate,
 with its fixed `partition_schedule_threshold`. Its input assumptions are
 the same as the main iff: `d ≥ 4`, natural-square weights `s`, and half-total
-at least one.
+at least one. Here `d` is the full feature dimension.
 
 The certificate consists of **exactly `d` bits**, one per coordinate. The
 verifier accepts precisely when the selected and unselected coordinates have
@@ -35,11 +35,12 @@ encode an arbitrary real witness or approximate its entries.
 
 Encode each weight in binary, least significant bit first. Encode each data
 bit `b` by the pair `0b`, and terminate each weight with `11`. This gives
-an unambiguous binary encoding of the weight vector. Its length is
+an unambiguous binary encoding of the weight vector. Here `size` is Lean's
+`Nat.size`, the binary digit count with `size(0) = 0`. The encoding's length is
 
-\[
+```math
 L = 2\sum_{i=1}^{d}(\operatorname{size}(s_i)+1).
-\]
+```
 
 `encodeInput_length` proves this exact length. `certificate_length` proves
 that the certificate has `d` bits, and `dimension_le_inputBits` proves
@@ -48,9 +49,9 @@ that the certificate has `d` bits, and `dimension_le_inputBits` proves
 The checker uses an explicit binary-arithmetic cost model. Each addition or
 comparison of operands `x,y` is charged
 
-\[
+```math
 8(\operatorname{size}(x)+\operatorname{size}(y)+1).
-\]
+```
 
 This is a linear bit-work allowance for ripple-carry addition and padded
 binary comparison. An unbounded-integer addition is therefore not a
@@ -64,9 +65,9 @@ The proof bounds the combined bit length of the four accumulators by
 `16*d*(B+1)`. Including input reading and the final comparisons gives
 the proved bound
 
-\[
+```math
 \operatorname{verificationWork}(s,b) \le 128(L+1)^2
-\]
+```
 
 for **every** certificate, accepting or rejecting. `verificationWork_le`
 proves this inequality. The cost theorem concerns these explicit bit-cost
@@ -91,5 +92,4 @@ The checks cover the fixed threshold, quarter-integer arithmetic, coverage of
 coordinate zero, rejection of a balanced fractional selector, acceptance,
 unequal-cardinality rejection, unequal-sum rejection, increased work for longer
 binary operands, an end-to-end Gaussian example, and axiom dependencies.
-The certificate machinery lives in the
-library; `Solution.lean` retains Karamata and the two requested iff results.
+The certificate machinery lives in the library; `Solution.lean` retains Karamata and the two requested iff results.

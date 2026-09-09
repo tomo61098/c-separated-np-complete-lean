@@ -15,17 +15,17 @@ as mathematical proofs; they are not machine-model complexity theorems in Lean.
 
 For input weights `a₁, …, aₙ ≥ 1`, set
 
-\[
+```math
 S=\sum_{i=1}^n a_i,\qquad Q=\sum_{i=1}^n a_i^2,\qquad
 K=2+n+2S+Q.
-\]
+```
 
 For each `i = 1, …, n`, output the pair
 
-\[
+```math
 u_i=K^{n+i},\quad v_i=a_iK^{n-i},\qquad
 x_i^+=(u_i+v_i)^2,\quad x_i^-=(u_i-v_i)^2.
-\]
+```
 
 The ordered output lists all `xᵢ⁺` followed by all `xᵢ⁻`. There are `2n`
 entries. Since `aᵢ < K ≤ K^(2i)`, we have `0 ≤ vᵢ < uᵢ`; consequently
@@ -41,9 +41,9 @@ the theorem requires neither `hK` nor `hbound`.
 
 The identity
 
-\[
+```math
 x_i^+-x_i^-=4u_iv_i=4a_iK^{2n}
-\]
+```
 
 proves the forward direction. Given an ordinary partition, put `xᵢ⁺` on the
 first side precisely when `aᵢ` is selected, and otherwise put `xᵢ⁻` there.
@@ -54,11 +54,11 @@ For the reverse direction, consider **any** equal-sum split of the output.
 Let `pᵢ, qᵢ ∈ {0,1}` indicate whether `xᵢ⁺, xᵢ⁻` are on its first side.
 Set `δᵢ = pᵢ + qᵢ − 1` and `ηᵢ = pᵢ − qᵢ`. Expanding the square sums gives
 
-\[
+```math
 0=\sum_i\delta_iK^{2n+2i}
   +\sum_i\left(2\eta_i a_iK^{2n}
        +\delta_i a_i^2K^{2(n-i)}\right).
-\]
+```
 
 Write `C = 2S + Q`. The second sum has absolute value at most `C K^(2n)`
 because `|δᵢ|, |ηᵢ| ≤ 1`. Suppose some `δᵢ` is nonzero and choose the
@@ -81,12 +81,13 @@ The decisive helper is `SquareReduction.forces_pairs`.
 
 ## Polynomial time and injectivity
 
-Let `M = maxᵢ aᵢ`. The proved bounds are
+For `n ≥ 1`, let `M = maxᵢ aᵢ`; for the empty instance take `M = 0`.
+The proved bounds are
 
-\[
+```math
 K\le 2+n+2nM+nM^2,\qquad
 x_i^\pm\le K^{4(n+1)}.
-\]
+```
 
 Thus `log₂ K = O(log(n+1)+log(M+1))`, and each output entry has
 `O(n(log(n+1)+log(M+1)))` bits. The whole output has polynomial length in
@@ -113,7 +114,7 @@ does not itself require this additional injectivity property.
 Ordinary positive-integer PARTITION is NP-complete; see Richard M. Karp,
 [*Reducibility Among Combinatorial Problems*](https://doi.org/10.1007/978-1-4684-2001-2_9),
 in *Complexity of Computer Computations* (1972), pp. 85–103
-([author's reprint](https://www.cs.umd.edu/~gasarch/BLOGPAPERS/Karp.pdf)).
+([reprint hosted by the University of Maryland](https://www.cs.umd.edu/~gasarch/BLOGPAPERS/Karp.pdf)).
 The polynomial-time correctness-preserving reduction above proves NP-hardness
 of equal-cardinality partition restricted to positive squares.
 
@@ -125,20 +126,25 @@ each verification step uses polynomial-time integer arithmetic. Thus the
 target problem is in NP and is **NP-complete**.
 
 The auxiliary paired-choice lemmas have additional assumptions.
-The strengthened construction above supplies the
-arbitrary-selector reverse direction and explicit base that those lemmas
+The strengthened construction above supplies the arbitrary-selector reverse direction and explicit base that those lemmas
 alone did not provide. The source is ordinary PARTITION; its selected weights
 need not have equal cardinality.
 
 ## Why the Gaussian construction uses squares
 
+For the Gaussian theorem, apply the construction to inputs with `n ≥ 2`,
+so its output dimension `d = 2n` satisfies `d ≥ 4`. The square-partition
+reduction itself also covers smaller inputs. Composing it into a complete
+Gaussian complexity reduction requires handling those finitely many source
+lengths separately; that composition is outside the current Lean theorem.
+
 The partition gadget uses `√sᵢ` in its mean vectors. Restricting EC partition
 to square weights makes these roots integers while retaining an NP-complete
 source problem. The paired output also satisfies
 
-\[
+```math
 \sum_i(x_i^+ + x_i^-) = 2\sum_i(u_i^2+v_i^2),
-\]
+```
 
 so `c = Σsᵢ/2` is integral. The output dimension `d` is even, so the
 schedule base `m = d/2`, schedule means `m^j`, separation sums
@@ -149,10 +155,10 @@ for first reducing to square EC partition.
 
 The fixed threshold is
 
-\[
+```math
 T(s,d)=\frac{\sum_i s_i}{2}\frac{d(d+1)}{2}-\frac{3d}{4}
       =\frac{(\sum_i s_i)d(d+1)-3d}{4}.
-\]
+```
 
 For natural input weights the numerator is an integer, so the threshold
 is a multiple of `1/4` and has at most two fractional binary digits.

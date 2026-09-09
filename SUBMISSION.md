@@ -14,21 +14,24 @@ The proof first reduces ordinary PARTITION to equal-cardinality partition of
 positive squares. Square roots and the even total of the paired construction
 make the Gaussian data integral. Three Gaussians impose partition balance;
 a schedule of `d+1` Gaussians enforces binary selectors. The two blocks are
-placed far apart so their cross-block hinge penalties vanish. The threshold is an integer multiple of `1/4` for natural input
-weights, as proved by `partition_schedule_threshold_quarter_integral`.
+placed far apart so their cross-block hinge penalties vanish. The threshold
+is an integer multiple of `1/4` for natural input weights, as proved by `partition_schedule_threshold_quarter_integral`.
 
-Local checks on 2026-09-08 passed: the full Lean build, equality of the
-independent theorem types and 42 definition bodies, the standard-three-axiom
-audit, and Solution's independence from Challenge. The pinned Palomar metadata
-validator and repository submission preflight also pass. Tomislav Prusina
-is recorded as the author and responsible maintainer.
+Local checks on 2026-09-09 passed for the corrected fixed threshold: the full
+Lean build, equality of the independent theorem types and 42 definition
+bodies, the standard-three-axiom audit, and Solution's independence from
+Challenge. The square-partition and certificate checks also passed, including
+the threshold regressions. Metadata validation and the repository submission
+preflight were previously reported as passing on 2026-09-08; they have not
+been rerun for the corrected threshold. Tomislav Prusina is recorded as the
+author and responsible maintainer.
 A successful full Comparator/NanoDa replay has not yet been confirmed;
 no Palomar submission has been made.
 
 The auxiliary ordinary-PARTITION reduction now has an explicit base, an
 unrestricted reverse implication, positive-square outputs, injectivity, and
 numerical size bounds. Its build, positive-instance tests, and standard-axiom
-audits passed on 2026-09-08. [SQUARE_PARTITION.md](SQUARE_PARTITION.md) supplies
+audits passed again on 2026-09-09. [SQUARE_PARTITION.md](SQUARE_PARTITION.md) supplies
 the mathematical NP-completeness argument and identifies which parts are
 formalized in Lean.
 
