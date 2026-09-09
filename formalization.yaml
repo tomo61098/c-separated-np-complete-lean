@@ -34,6 +34,16 @@ classification:
   msc2020: ["03B35", "68Q17"]
 
 sources:
+  - title: "Fixed-threshold Gaussian gadget equivalence and square-partition reduction"
+    authors: ["Tomislav Prusina"]
+    type: "original-proof"
+    relationship: "other"
+    location: "Solution.lean; README.md; SQUARE_PARTITION.md"
+    note: >-
+      Original results developed and proved in this repository: the Gaussian
+      gadget equivalence with a fixed threshold and the reduction from ordinary
+      PARTITION to equal-cardinality partition of positive squares. The papers
+      below supply background for the source problem and Gaussian formulation.
   - title: "Reducibility Among Combinatorial Problems"
     authors: ["Richard M. Karp"]
     type: "paper"

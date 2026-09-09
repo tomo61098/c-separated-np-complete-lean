@@ -21,9 +21,9 @@ Local checks on 2026-09-09 passed for the corrected fixed threshold: the full
 Lean build, equality of the independent theorem types and 42 definition
 bodies, the standard-three-axiom audit, and Solution's independence from
 Challenge. The square-partition and certificate checks also passed, including
-the threshold regressions. Metadata validation and the repository submission
-preflight were previously reported as passing on 2026-09-08; they have not
-been rerun for the corrected threshold. Tomislav Prusina is recorded as the
+the threshold regressions. The pinned Palomar metadata validator and repository
+submission preflight also passed on 2026-09-09, with the result classified
+as original. Tomislav Prusina is recorded as the
 author and responsible maintainer.
 A successful full Comparator/NanoDa replay has not yet been confirmed;
 no Palomar submission has been made.
