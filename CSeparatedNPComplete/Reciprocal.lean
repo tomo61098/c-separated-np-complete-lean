@@ -48,21 +48,11 @@ theorem full_correction_eq_binary_iff {n : Nat} (a : Vec n) (ha : box_constraint
     intro i _
     exact (inv_one_plus_line_eq_binary_iff (a i) ⟨ha.1 i, ha.2 i⟩).mpr (hb i)
 
-/-- The threshold restores the schedule's missing coordinate-zero correction. -/
-theorem schedule_full_correction_eq_sum {n : Nat} (a : Vec n) (hn : 0 < n) :
-    (1 + dot a (canon_e 0))⁻¹ + gaussian_schedule_hinge_correction a (n - 1) =
-      ∑ i, (1 + a i)⁻¹ := by
-  let f : Nat → ℝ := fun j => (1 + dot a (canon_e j))⁻¹
-  have hn' : n - 1 + 1 = n := by omega
-  have hsum := Finset.sum_range_succ' f (n - 1)
-  rw [hn'] at hsum
-  calc
-    _ = ∑ j ∈ Finset.range n, f j := by
-      rw [hsum]
-      simp only [f, gaussian_schedule_hinge_correction]
-      ring
-    _ = ∑ i : Fin n, (1 + a i)⁻¹ := by
-      rw [Finset.sum_range]
-      simp only [f, dot_canon_e_eq]
+/-- The schedule correction includes every feature coordinate. -/
+theorem schedule_full_correction_eq_sum {n : Nat} (a : Vec n) :
+    gaussian_schedule_hinge_correction a n = ∑ i, (1 + a i)⁻¹ := by
+  unfold gaussian_schedule_hinge_correction
+  rw [Finset.sum_range]
+  simp only [dot_canon_e_eq]
 
 end CSeparatedNPComplete

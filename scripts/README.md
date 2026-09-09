@@ -24,7 +24,9 @@ and the axiom dependencies of correctness, injectivity, and size bounds.
 its connection to the original Gaussian predicate, and the certificate-length
 and quadratic bit-work theorem dependencies. It includes positive-square
 acceptance, count and sum rejections, and a check that longer integer operands
-incur more verification work.
+incur more verification work. It also checks the fixed threshold, quarter-integer
+arithmetic, coverage of coordinate zero, and rejection of balanced fractional
+selectors, and audits the quarter-integrality theorem's axioms.
 
 The GitHub Actions workflow runs the build and this audit, metadata validation
 using Palomar's own pinned validator, license detection, and full Comparator

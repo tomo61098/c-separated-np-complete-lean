@@ -9,11 +9,12 @@ project:
     starts from NP-completeness of equal-cardinality partition of positive
     squares, giving integral Gaussian data via integer roots and an even
     paired total. Three Gaussians enforce partition balance, and a schedule
-    of 2*d Gaussians enforces binary selectors. Explicit separation of the
-    two blocks makes cross-block hinge penalties vanish. On binary certificates
-    the threshold is an integer multiple of 1/2. The main proved result is the
+    of d+1 Gaussians enforces binary selectors. Explicit separation of the
+    two blocks makes cross-block hinge penalties vanish. The fixed threshold
+    is (dot s 1 / 2)*d*(d+1)/2 - 3*d/4, an integer multiple of 1/4
+    for natural input weights. Here d is the full dimension. The main proved result is the
     pointwise gadget iff. The full
-    complexity reduction is not formalized. The threshold depends on the selector.
+    complexity reduction is not formalized. The threshold depends only on the input.
     General Karamata inequality and an unconditional ordinary-PARTITION to
     positive-square equal-cardinality partition equivalence are auxiliary
     results stated in Solution.lean. The square encoding has proved injectivity
@@ -67,12 +68,12 @@ status:
     The sole submission target is partition_gadget_schedule_partition_iff.
     The main theorem and its dependencies are proved, lake build passes,
     and main-theorem axiom inspection found only the three standard axioms.
-    The result is a pointwise equivalence with a selector-dependent
-    threshold, in dimension 2*d with 2*d+3 Gaussian classes. For this Gaussian
-    result, a 2*d-bit certificate and sound and complete integer verifier are
+    The result is a pointwise equivalence with a fixed
+    threshold, in dimension d with d+4 Gaussian classes. For this Gaussian
+    result, a d-bit certificate and sound and complete integer verifier are
     formalized, with work at most 128*(L+1)^2 in the explicit binary-arithmetic
-    cost model, where L encodes s. The input assumptions and threshold are
-    unchanged. General Gaussian NP membership, machine-model complexity theorems,
+    cost model, where L encodes s. The dimension is at least 4, the weights are
+    natural squares, and their half-total is at least one. General Gaussian NP membership, machine-model complexity theorems,
     the full reduction's encoding bounds, and approximation guarantees are
     outside the formalized scope.
     The auxiliary square reduction proves unconditional equivalence from ordinary
@@ -116,7 +117,7 @@ automation:
         the construction to reduce ordinary positive-integer PARTITION with
         an explicit base and a reverse implication for arbitrary selectors.
         Prove a polynomial certificate for the original Gaussian gadget predicate,
-        preserving its threshold and keeping supporting results in the library.
+        using the fixed threshold and keeping supporting results in the library.
   spend_usd: "not tracked"
   notes: >-
     The Lean proofs were developed with AI assistance, including parallel
@@ -128,9 +129,10 @@ fidelity:
     The development uses functions Fin n -> Real for vectors and lists for
     Gaussian collections. The scalar schedule uses finite sums and factored
     covariances. The
-    main statement retains d > 1, half-total at least 1, natural-square
-    coordinates, and the threshold's dependence on the zeroth selector
-    coordinate. Its Gaussian count is 2*d+3 in dimension 2*d.
+    main statement assumes d >= 4, half-total at least 1, and natural-square
+    coordinates. The threshold is (dot s 1 / 2)*d*(d+1)/2 - 3*d/4.
+    Its Gaussian count is d+4 in dimension d. Schedule class i > 0
+    uses coordinate i-1, so all d coordinates contribute to the correction.
     Karamata's domain convexity and conditional function
     convexity are bundled as convexOnPredicate, proved equivalent to Mathlib
     ConvexOn. Equal coordinates are handled by extending secant slopes.
@@ -150,10 +152,11 @@ fidelity:
     binary encoding and bit-cost semantics. The proof bounds this explicit
     semantics, not a compiled Turing machine or arbitrary Gaussian feasibility.
     The integrality explanation in SQUARE_PARTITION.md applies to outputs of
-    the paired square reduction, whose total is even. The half-integer threshold
-    description applies to binary selectors. This arithmetic explanation is
-    prose, not a separate Lean integrality theorem. The implemented binary
-    forcing block is a schedule of 2*d classes, alongside the three-class
+    the paired square reduction, whose total and dimension are even. Gaussian-data
+    integrality is explained in prose. The threshold's membership in quarter
+    integers is proved in partition_schedule_threshold_quarter_integral for
+    all natural input weights. The implemented binary
+    forcing block is a schedule of d+1 classes, alongside the three-class
     partition block, with all cross-block hinge penalties proved zero.
 
 review:
@@ -193,7 +196,7 @@ alignment:
       lean: "CSeparatedNPComplete.partition_gadget_schedule_partition_iff"
       module: "Solution"
       status: "proved"
-      note: "Sole compared theorem; preserves the pointwise equivalence and selector-dependent threshold."
+      note: "Sole compared theorem; pointwise equivalence with a fixed threshold in the full dimension d."
     - source: "Paired-square partition implies original-weight partition"
       lean: "CSeparatedNPComplete.square_partition_implies_partition_for_choice"
       module: "CSeparatedNPComplete.SquarePartitionResults"

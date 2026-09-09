@@ -53,7 +53,7 @@ def gaussian_schedule_mu {n : Nat} (m : ℝ) (i : Nat) : Vec n := fun _ => m ^ i
 
 def gaussian_schedule_sigma {n : Nat} (m : ℝ) (i : Nat) : Vec n :=
   if i = 0 then 1 else
-    fun j => gaussian_schedule_separation_sum m i i * (m * canon_e i j + 1)
+    fun j => gaussian_schedule_separation_sum m i i * (m * canon_e (i - 1) j + 1)
 
 def gaussian_schedule_class {n : Nat} (m : ℝ) (i : Nat) : Gaussian n :=
   (gaussian_schedule_mu m i, gaussian_schedule_sigma m i)
@@ -62,7 +62,7 @@ def gaussian_schedule {n : Nat} (m : ℝ) (k : Nat) : List (Gaussian n) :=
   (List.range k).map (gaussian_schedule_class m)
 
 def gaussian_schedule_hinge_correction {n : Nat} (a : Vec n) (k : Nat) : ℝ :=
-  ∑ j ∈ Finset.range k, (1 + dot a (canon_e (j + 1)))⁻¹
+  ∑ j ∈ Finset.range k, (1 + dot a (canon_e j))⁻¹
 
 def second_gadget_gamma (n : Nat) (m : ℝ) : ℝ :=
   m + gaussian_schedule_separation_sum m n n
@@ -100,12 +100,11 @@ def second_gadget_instance {n : Nat} (m c : ℝ) (s : Vec n) : List (Gaussian n)
 def second_gadget_partition_instance {n : Nat} (m : ℝ) (s : Vec n) :
     List (Gaussian n) := second_gadget_instance m (dot s 1 / 2) s
 
-def partition_gadget_schedule (d : Nat) (s : Vec (2 * d)) : List (Gaussian (2 * d)) :=
-  second_gadget_partition_instance (d : ℝ) s ++ gaussian_schedule (d : ℝ) (2 * d)
+def partition_gadget_schedule (d : Nat) (s : Vec d) : List (Gaussian d) :=
+  second_gadget_partition_instance ((d : ℝ) / 2) s ++
+    gaussian_schedule ((d : ℝ) / 2) (d + 1)
 
-def partition_schedule_threshold (d : Nat) (a s : Vec (2 * d)) : ℝ :=
-  let k := 2 * d - 1
-  dot s 1 / 2 * (k : ℝ) * ((k : ℝ) + 1) / 2 -
-    (3 * (d : ℝ) / 2 - (1 + dot a (canon_e 0))⁻¹)
+def partition_schedule_threshold (d : Nat) (s : Vec d) : ℝ :=
+  dot s 1 / 2 * (d : ℝ) * ((d : ℝ) + 1) / 2 - 3 * (d : ℝ) / 4
 
 end CSeparatedNPComplete

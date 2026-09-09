@@ -64,7 +64,7 @@ theorem gaussian_schedule_separation_sum_diagonal_mono {m : ℝ} (hm : 2 ≤ m)
 theorem gaussian_schedule_sigma_dot {n : ℕ} (m : ℝ) (a : Vec n) {j : ℕ}
     (hj : j ≠ 0) :
     dot a (gaussian_schedule_sigma m j) =
-      gaussian_schedule_separation_sum m j j * (m * dot a (canon_e j) + dot a 1) := by
+      gaussian_schedule_separation_sum m j j * (m * dot a (canon_e (j - 1)) + dot a 1) := by
   simp only [gaussian_schedule_sigma, if_neg hj, dot, mul_add, Finset.mul_sum,
     ← Finset.sum_add_distrib]
   apply Finset.sum_congr rfl
@@ -88,7 +88,7 @@ theorem gaussian_schedule_sigma_dot_positive_all {n : ℕ} {m : ℝ} (a : Vec n)
   · simp only [gaussian_schedule_sigma, if_pos hj, hsum]
     linarith
   · rw [gaussian_schedule_sigma_dot m a hj, hsum]
-    have he := dot_canon_e_nonneg a j ha
+    have he := dot_canon_e_nonneg a (j - 1) ha
     have hs := gaussian_schedule_separation_sum_ge_1 hm (Nat.pos_of_ne_zero hj)
     apply mul_pos (by linarith)
     nlinarith
@@ -100,7 +100,7 @@ theorem gaussian_schedule_later_covariance {n : ℕ} {m : ℝ} (a : Vec n)
   have hj : j ≠ 0 := by omega
   have hm0 : 0 ≤ m := by linarith
   have hj0 := gaussian_schedule_separation_sum_nonneg m j j
-  have hej := dot_canon_e_nonneg a j ha
+  have hej := dot_canon_e_nonneg a (j - 1) ha
   rw [gaussian_schedule_sigma_dot m a hj, hsum]
   by_cases hi : i = 0
   · simp only [gaussian_schedule_sigma, if_pos hi, hsum]
@@ -110,7 +110,7 @@ theorem gaussian_schedule_later_covariance {n : ℕ} {m : ℝ} (a : Vec n)
       _ ≤ _ := mul_le_mul_of_nonneg_left (by nlinarith) hj0
   · rw [gaussian_schedule_sigma_dot m a hi, hsum]
     have hi0 := gaussian_schedule_separation_sum_nonneg m i i
-    have hei := dot_canon_e_le_dot_one a i ha
+    have hei := dot_canon_e_le_dot_one a (i - 1) ha
     rw [hsum] at hei
     have hscaled := gaussian_schedule_separation_sum_scaled_le hm hij
     calc
@@ -119,7 +119,7 @@ theorem gaussian_schedule_later_covariance {n : ℕ} {m : ℝ} (a : Vec n)
       _ = m * ((m + 1) * gaussian_schedule_separation_sum m i i) := by ring
       _ ≤ m * gaussian_schedule_separation_sum m j j :=
         mul_le_mul_of_nonneg_left hscaled hm0
-      _ ≤ gaussian_schedule_separation_sum m j j * (m * dot a (canon_e j) + m) := by
+      _ ≤ gaussian_schedule_separation_sum m j j * (m * dot a (canon_e (j - 1)) + m) := by
         rw [mul_comm m]
         exact mul_le_mul_of_nonneg_left (by nlinarith) hj0
 
@@ -138,7 +138,7 @@ theorem gaussian_schedule_pair_hinge_before {n : ℕ} {m c : ℝ} (a : Vec n)
   have hord := gaussian_schedule_later_covariance a hm ha hsum hij
   have hpos := gaussian_schedule_sigma_dot_positive_all a hm ha hsum j
   have hterm := gaussian_schedule_separation_term_le_sum m hij
-  have hej := dot_canon_e_nonneg a j ha
+  have hej := dot_canon_e_nonneg a (j - 1) ha
   have hj0 := gaussian_schedule_separation_sum_nonneg m j j
   have hm0 : 0 ≤ m := by linarith
   have hbound : (m ^ i - m ^ j) ^ 2 * m ≤ dot a (gaussian_schedule_sigma m j) := by
@@ -162,16 +162,16 @@ theorem hinge_to_gaussian_schedule_last {n : ℕ} {m c : ℝ} (a : Vec n)
     (hm : 2 ≤ m) (hc : 1 ≤ c) (ha : is_vec_leq 0 a) (hsum : dot a 1 = m)
     {j : ℕ} (hj : 0 < j) :
     hinge_to c a (gaussian_schedule m j) (gaussian_schedule_class m j) =
-      c * (j : ℝ) - (1 + dot a (canon_e j))⁻¹ := by
+      c * (j : ℝ) - (1 + dot a (canon_e (j - 1)))⁻¹ := by
   have hspos : 0 < gaussian_schedule_separation_sum m j j :=
     lt_of_lt_of_le (by norm_num) (gaussian_schedule_separation_sum_ge_1 hm hj)
-  have he := dot_canon_e_nonneg a j ha
+  have he := dot_canon_e_nonneg a (j - 1) ha
   have hmne : m ≠ 0 := by linarith
-  have hene : 1 + dot a (canon_e j) ≠ 0 := by linarith
+  have hene : 1 + dot a (canon_e (j - 1)) ≠ 0 := by linarith
   have hratio : gaussian_schedule_separation_sum m j j * m /
-      dot a (gaussian_schedule_sigma m j) = (1 + dot a (canon_e j))⁻¹ := by
+      dot a (gaussian_schedule_sigma m j) = (1 + dot a (canon_e (j - 1)))⁻¹ := by
     rw [gaussian_schedule_sigma_dot m a (Nat.ne_of_gt hj), hsum]
-    have hfactor : m * dot a (canon_e j) + m = m * (1 + dot a (canon_e j)) := by ring
+    have hfactor : m * dot a (canon_e (j - 1)) + m = m * (1 + dot a (canon_e (j - 1))) := by ring
     rw [hfactor]
     field_simp [hspos.ne', hmne, hene]
   have hsquares : (∑ i ∈ Finset.range j, (m ^ i - m ^ j) ^ 2) =
@@ -209,7 +209,7 @@ theorem gaussian_schedule_hinge_form_prefix_m_ge_2 {n : ℕ} (k : ℕ) {m c : �
     rw [gaussian_schedule_snoc, hinge_form_snoc, ih,
       hinge_to_gaussian_schedule_last a hm hc ha hsum (Nat.succ_pos k)]
     simp only [gaussian_schedule_hinge_correction, Finset.sum_range_succ,
-      Nat.cast_succ, Nat.succ_eq_add_one]
+      Nat.cast_succ, Nat.succ_eq_add_one, Nat.add_sub_cancel]
     ring
 
 end CSeparatedNPComplete

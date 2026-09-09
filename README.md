@@ -27,17 +27,18 @@ The square restriction has a concrete purpose: the Gaussian means contain
 `√sᵢ`, so square weights make those coordinates integral.
 
 The square reduction outputs pairs `(uᵢ+vᵢ)², (uᵢ−vᵢ)²`. Their total is
-`2*Σᵢ(uᵢ²+vᵢ²)`, hence `c = Σsᵢ/2` is also an integer. With integer `d`,
-the displayed Gaussian formulas therefore give integer means and diagonal
-covariances. On a binary certificate the threshold is an integer multiple
-of `1/2`. This integrality
-argument concerns outputs of the square reduction; the main iff allows
-more general square inputs and fractional selectors.
+`2*Σᵢ(uᵢ²+vᵢ²)`, hence `c = Σsᵢ/2` is also an integer. The output
+dimension `d` is even, so `m = d/2` is integral. The displayed Gaussian
+formulas therefore give integer means and diagonal
+covariances. The fixed threshold is an integer multiple of `1/4` for all
+natural input weights. The Gaussian-data integrality argument concerns
+outputs of the square reduction; the main iff allows more general square
+inputs and fractional selectors.
 
 Three Gaussians enforce the partition equation: their combined hinge penalty
 vanishes exactly when the selected weights sum to half the total. A second
 block enforces binary selectors. In the implemented construction, this block
-is a **schedule of `2d` Gaussians**. Its objective contains reciprocal terms,
+is a **schedule of `d+1` Gaussians**. Its objective contains reciprocal terms,
 and the bound `1/(1+x) ≤ 1−x/2` is tight exactly at `x = 0` or `x = 1`.
 Attaining the required total bound forces every selector coordinate to be
 one of these endpoints.
@@ -47,7 +48,7 @@ scaling. Every pair with one Gaussian in each block then has zero hinge
 penalty under the box and cardinality constraints. Their objectives add,
 so feasibility forces both partition balance and binary selection.
 Conversely, any equal-cardinality partition attains the stated bound.
-This gives the gadget iff, with `2d+3` Gaussian classes in total.
+This gives the gadget iff, with `d+4` Gaussian classes in total.
 
 The detailed square reduction and complexity argument are in
 [SQUARE_PARTITION.md](SQUARE_PARTITION.md). The polynomial certificate proof
@@ -56,25 +57,33 @@ for the constructed Gaussian predicate is explained in
 
 ## Main statement and scope
 
-For `d > 1`, let `s` have `2*d` coordinates, each the square of a natural
+For `d ≥ 4`, let `s` have `d` coordinates, each the square of a natural
 number, with `c = dot s 1 / 2 ≥ 1`. The target theorem states, for every
 selector `a`, the equivalence between:
 
-- `a` lies in `[0,1]^(2*d)`, its coordinates sum to `d`, and the hinge
+- `a` lies in `[0,1]^d`, its coordinates sum to `d/2`, and the hinge
   objective of `partition_gadget_schedule d s` is at most
-  `partition_schedule_threshold d a s`;
-- `a` is binary, selects exactly `d` coordinates, and satisfies
+  `partition_schedule_threshold d s`;
+- `a` is binary, selects exactly `d/2` coordinates, and satisfies
   `dot a s = dot s 1 / 2`.
 
-The construction has dimension `2*d` and `2*d + 3` Gaussian classes: a
-three-class partition gadget and a schedule of `2*d` classes. Writing
-`k = 2*d - 1`, its threshold is
-`c*k*(k+1)/2 - (3*d/2 - 1/(1+a₀))`. This threshold depends on the
-selector's zeroth coordinate. The formalization concerns this pointwise
-equivalence. The library additionally proves a polynomial certificate theorem
-for this constructed predicate. The complete fixed-threshold reduction,
-general Gaussian NP membership, and machine-model complexity theorems remain
-outside the formalized scope.
+The construction has dimension `d` and `d+4` Gaussian classes: a
+three-class partition gadget and a schedule of `d+1` classes. Its fixed
+threshold is
+
+\[
+\frac{s^T\mathbf{1}}{2}\,\frac{d(d+1)}{2}-\frac{3d}{4}.
+\]
+
+Every coordinate contributes to the schedule's reciprocal sum, whose maximum
+under the box and cardinality constraints is `3d/4`, attained exactly by
+binary selectors. Lean proves that the threshold is an integer multiple of
+`1/4` for natural input weights in
+`partition_schedule_threshold_quarter_integral`.
+The library additionally proves a polynomial certificate theorem for this
+constructed predicate. General Gaussian NP membership, the full reduction's
+encoding bounds, and machine-model complexity theorems remain outside the
+formalized scope.
 
 Here a Gaussian class is represented by its mean and diagonal covariance
 vectors; the theorem does not construct probability measures. Zero input
@@ -128,7 +137,7 @@ checked in [scripts/SquarePartitionChecks.lean](scripts/SquarePartitionChecks.le
 
 The Gaussian gadget also has a proved polynomial certificate theorem,
 `PolynomialCertificate.gadget_polynomial_certificate`. Its certificate has
-exactly `2d` bits. An executable verifier checks the two integer counts and
+exactly `d` bits. An executable verifier checks the two integer counts and
 sums; the main iff proves soundness and completeness for the original gadget
 predicate. With binary input length `L`, Lean proves a verification-work bound
 of `128*(L+1)^2` in the explicit binary-arithmetic cost model. See

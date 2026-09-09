@@ -226,17 +226,16 @@ theorem binary_has_certificate {n : ℕ} (a : Vec n) (ha : is_binary a) :
   funext i
   rcases ha i with hi | hi <;> simp [selector, hi]
 
-/-- The original gadget predicate has a certificate of `2*d` bits, verified
-within a quadratic binary-arithmetic work bound. The threshold and the main
-pointwise iff are unchanged. -/
-theorem gadget_polynomial_certificate (d : ℕ) (s : Fin (2 * d) → ℕ)
-    (hd : 1 < d) (hc : 1 ≤ dot (fun i => (s i : ℝ)) 1 / 2)
+/-- The original gadget predicate has a certificate of `d` bits, verified
+within a quadratic binary-arithmetic work bound for the fixed-threshold Gaussian construction. -/
+theorem gadget_polynomial_certificate (d : ℕ) (s : Fin d → ℕ)
+    (hd : 4 ≤ d) (hc : 1 ≤ dot (fun i => (s i : ℝ)) 1 / 2)
     (hs : perf_square_vec (fun i => (s i : ℝ))) :
-    (∃ a : Vec (2 * d), box_constraints a ∧ dot a 1 = (d : ℝ) ∧
+    (∃ a : Vec d, box_constraints a ∧ dot a 1 = (d : ℝ) / 2 ∧
       hinge_form (dot (fun i => (s i : ℝ)) 1 / 2) a
         (partition_gadget_schedule d (fun i => (s i : ℝ))) ≤
-        partition_schedule_threshold d a (fun i => (s i : ℝ))) ↔
-    ∃ b : Fin (2 * d) → Bool, verify s b = true ∧
+        partition_schedule_threshold d (fun i => (s i : ℝ))) ↔
+    ∃ b : Fin d → Bool, verify s b = true ∧
       (certificate b).length ≤ inputBits s ∧
       verificationWork s b ≤ 128 * (inputBits s + 1) ^ 2 := by
   constructor

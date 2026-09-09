@@ -2,11 +2,11 @@
 
 `CSeparatedNPComplete.PolynomialCertificate.gadget_polynomial_certificate`
 proves the certificate result for the original Gaussian gadget predicate,
-with its existing `partition_schedule_threshold`. Its input assumptions are
-the same as the main iff: `d > 1`, natural-square weights `s`, and half-total
+with its fixed `partition_schedule_threshold`. Its input assumptions are
+the same as the main iff: `d ≥ 4`, natural-square weights `s`, and half-total
 at least one.
 
-The certificate consists of **exactly `2d` bits**, one per coordinate. The
+The certificate consists of **exactly `d` bits**, one per coordinate. The
 verifier accepts precisely when the selected and unselected coordinates have
 equal counts and equal integer-weight sums. The existing gadget iff proves
 that this is equivalent to feasibility of the constructed Gaussian instance.
@@ -38,12 +38,12 @@ bit `b` by the pair `0b`, and terminate each weight with `11`. This gives
 an unambiguous binary encoding of the weight vector. Its length is
 
 \[
-L = 2\sum_{i=1}^{2d}(\operatorname{size}(s_i)+1).
+L = 2\sum_{i=1}^{d}(\operatorname{size}(s_i)+1).
 \]
 
 `encodeInput_length` proves this exact length. `certificate_length` proves
-that the certificate has `2d` bits, and `dimension_le_inputBits` proves
-`2d ≤ L`.
+that the certificate has `d` bits, and `dimension_le_inputBits` proves
+`d ≤ L`.
 
 The checker uses an explicit binary-arithmetic cost model. Each addition or
 comparison of operands `x,y` is charged
@@ -61,7 +61,7 @@ for reading the input and certificate.
 
 The proof bounds the combined bit length of the four accumulators by
 `B = Σᵢ(size(sᵢ)+3)`, with `B ≤ 3L`. It bounds the recursion's work by
-`16*(2d)*(B+1)`. Including input reading and the final comparisons gives
+`16*d*(B+1)`. Including input reading and the final comparisons gives
 the proved bound
 
 \[
@@ -87,7 +87,9 @@ Run after `lake build`:
 lake env lean scripts/PolynomialCertificateChecks.lean
 ```
 
-The checks cover acceptance, unequal-cardinality rejection, unequal-sum
-rejection, increased work for longer binary operands, an end-to-end Gaussian
-example, and axiom dependencies. The certificate machinery lives in the
+The checks cover the fixed threshold, quarter-integer arithmetic, coverage of
+coordinate zero, rejection of a balanced fractional selector, acceptance,
+unequal-cardinality rejection, unequal-sum rejection, increased work for longer
+binary operands, an end-to-end Gaussian example, and axiom dependencies.
+The certificate machinery lives in the
 library; `Solution.lean` retains Karamata and the two requested iff results.

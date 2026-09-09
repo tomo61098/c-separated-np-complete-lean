@@ -18,16 +18,17 @@ squares, whose NP-completeness is established by the accompanying reduction
 from ordinary PARTITION. Squares make the roots in the Gaussian means integral.
 The paired square construction also has even total, making c integral. On its
 outputs the Gaussian means and diagonal covariances are integers, and the
-threshold on binary certificates is an integer multiple of 1/2.
+fixed threshold is (dot s 1 / 2)*d*(d+1)/2 - 3*d/4, an integer multiple of 1/4.
+Here d is the full feature dimension, and the schedule base is d/2.
 
 The theorem below states the pointwise gadget equivalence.
-Three Gaussians enforce partition balance; a schedule of 2*d Gaussians forces
+Three Gaussians enforce partition balance; a schedule of d+1 Gaussians forces
 the relaxed selector to be binary through equality in the reciprocal bound.
 Explicit offsets and scaling place the two blocks far apart, making all
 cross-block hinge penalties zero. The two requirements therefore combine
-into the stated iff. There are 2*d+3 classes in the implemented construction.
-The threshold explicitly depends on the selector; this statement does not
-assert a fixed-threshold NP-hardness reduction or polynomial encoding bounds.
+into the stated iff. There are d+4 classes in the implemented construction.
+The threshold is fixed for each input. This statement does not assert a
+machine-model NP-hardness theorem or polynomial encoding bounds.
 
 All definitions are given independently here. Only mathlib is imported; the
 single deliberate proof placeholder belongs to the Challenge, not the Solution.
@@ -102,7 +103,7 @@ def gaussian_schedule_mu {n : Nat} (m : ℝ) (i : Nat) : Vec n := fun _ => m ^ i
 /-- Unit covariance at index zero; thereafter scaled with a bump at coordinate `i`. -/
 def gaussian_schedule_sigma {n : Nat} (m : ℝ) (i : Nat) : Vec n :=
   if i = 0 then 1 else
-    fun j => gaussian_schedule_separation_sum m i i * (m * canon_e i j + 1)
+    fun j => gaussian_schedule_separation_sum m i i * (m * canon_e (i - 1) j + 1)
 
 /-- Mean and diagonal covariance of schedule class `i`. -/
 def gaussian_schedule_class {n : Nat} (m : ℝ) (i : Nat) : Gaussian n :=
@@ -160,24 +161,23 @@ def second_gadget_instance {n : Nat} (m c : ℝ) (s : Vec n) : List (Gaussian n)
 def second_gadget_partition_instance {n : Nat} (m : ℝ) (s : Vec n) :
     List (Gaussian n) := second_gadget_instance m (dot s 1 / 2) s
 
-/-- Three gadget classes followed by `2*d` schedule classes, in dimension `2*d`. -/
-def partition_gadget_schedule (d : Nat) (s : Vec (2 * d)) : List (Gaussian (2 * d)) :=
-  second_gadget_partition_instance (d : ℝ) s ++ gaussian_schedule (d : ℝ) (2 * d)
+/-- Three gadget classes followed by `d+1` schedule classes, in dimension `d`. -/
+def partition_gadget_schedule (d : Nat) (s : Vec d) : List (Gaussian d) :=
+  second_gadget_partition_instance ((d : ℝ) / 2) s ++
+    gaussian_schedule ((d : ℝ) / 2) (d + 1)
 
-/-- Bound in the source equivalence; it depends on selector coordinate zero. -/
-def partition_schedule_threshold (d : Nat) (a s : Vec (2 * d)) : ℝ :=
-  let k := 2 * d - 1
-  dot s 1 / 2 * (k : ℝ) * ((k : ℝ) + 1) / 2 -
-    (3 * (d : ℝ) / 2 - (1 + dot a (canon_e 0))⁻¹)
+/-- Fixed threshold, where `d` is the full feature dimension. -/
+def partition_schedule_threshold (d : Nat) (s : Vec d) : ℝ :=
+  dot s 1 / 2 * (d : ℝ) * ((d : ℝ) + 1) / 2 - 3 * (d : ℝ) / 4
 
 /-- The Gaussian bound holds precisely for equal-cardinality partition selectors.
 This is the sole theorem submitted for comparison. -/
 theorem partition_gadget_schedule_partition_iff
-    (d : Nat) (a s : Vec (2 * d))
-    (hd : 1 < d) (hc : 1 ≤ dot s 1 / 2) (hs : perf_square_vec s) :
-    (box_constraints a ∧ dot a 1 = (d : ℝ) ∧
+    (d : Nat) (a s : Vec d)
+    (hd : 4 ≤ d) (hc : 1 ≤ dot s 1 / 2) (hs : perf_square_vec s) :
+    (box_constraints a ∧ dot a 1 = (d : ℝ) / 2 ∧
       hinge_form (dot s 1 / 2) a (partition_gadget_schedule d s) ≤
-        partition_schedule_threshold d a s) ↔ is_ec_partition a s := by
+        partition_schedule_threshold d s) ↔ is_ec_partition a s := by
   sorry
 
 end CSeparatedNPComplete

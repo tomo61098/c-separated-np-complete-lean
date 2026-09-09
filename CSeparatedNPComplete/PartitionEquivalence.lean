@@ -4,73 +4,62 @@ import CSeparatedNPComplete.Reciprocal
 
 namespace CSeparatedNPComplete
 
-/-- The explicit Gaussian construction satisfies its threshold constraint exactly
-for equal-cardinality partition selectors. This is the main submission result.
-
-For `2*d` perfect-square entries with half-total at least one and `d > 1`, the
-left side allows every selector in the unit cube with total weight `d`. The
-inequality forces binary coordinates and the partition balance. -/
+/-- The fixed Gaussian threshold is attained exactly by equal-cardinality
+partition selectors. Here `d` is the full feature dimension. -/
 theorem partition_gadget_schedule_pointwise_iff
-    (d : Nat) (a s : Vec (2 * d))
-    (hd : 1 < d) (hc : 1 ≤ dot s 1 / 2) (hs : perf_square_vec s) :
-    (box_constraints a ∧ dot a 1 = (d : ℝ) ∧
+    (d : Nat) (a s : Vec d)
+    (hd : 4 ≤ d) (hc : 1 ≤ dot s 1 / 2) (hs : perf_square_vec s) :
+    (box_constraints a ∧ dot a 1 = (d : ℝ) / 2 ∧
       hinge_form (dot s 1 / 2) a (partition_gadget_schedule d s) ≤
-        partition_schedule_threshold d a s) ↔ is_ec_partition a s := by
-  have hm : (2 : ℝ) ≤ (d : ℝ) := by exact_mod_cast (show 2 ≤ d by omega)
+        partition_schedule_threshold d s) ↔ is_ec_partition a s := by
+  have hdreal : (4 : ℝ) ≤ (d : ℝ) := by exact_mod_cast hd
+  have hm : (2 : ℝ) ≤ (d : ℝ) / 2 := by linarith
   have hs_nonneg := perf_square_non_neg hs
-  have hn : 0 < 2 * d := by omega
-  have hlen : 2 * d - 1 + 1 = 2 * d := by omega
+  have hn : 0 < d := by omega
   let c := dot s 1 / 2
-  let C := c * ((2 * d - 1 : Nat) : ℝ) * (((2 * d - 1 : Nat) : ℝ) + 1) / 2
-  let G := hinge_form c a (second_gadget_instance (d : ℝ) c s)
-  let Corr := gaussian_schedule_hinge_correction a (2 * d - 1)
-  have hdecomp (ha : box_constraints a) (hcard : dot a 1 = (d : ℝ)) :
+  let C := c * (d : ℝ) * ((d : ℝ) + 1) / 2
+  let G := hinge_form c a (second_gadget_instance ((d : ℝ) / 2) c s)
+  let Corr := gaussian_schedule_hinge_correction a d
+  have hdecomp (ha : box_constraints a) (hcard : dot a 1 = (d : ℝ) / 2) :
       hinge_form c a (partition_gadget_schedule d s) = G + (C - Corr) := by
     unfold partition_gadget_schedule second_gadget_partition_instance
-    rw [second_gadget_schedule_hinge_form_app (d : ℝ) c a s hm hc ha hs_nonneg hcard
-      (by dsimp [c]; ring)]
-    have hschedule := gaussian_schedule_hinge_form_prefix_m_ge_2 (2 * d - 1)
-      a hm hc ha.1 hcard
-    rw [hlen] at hschedule
-    rw [hschedule]
-  have hfull := schedule_full_correction_eq_sum a hn
+    rw [second_gadget_schedule_hinge_form_app ((d : ℝ) / 2) c a s hm hc ha
+      hs_nonneg hcard (by dsimp [c]; ring) hn]
+    rw [gaussian_schedule_hinge_form_prefix_m_ge_2 d a hm hc ha.1 hcard]
+  have hfull := schedule_full_correction_eq_sum a
   have hG_nonneg : 0 ≤ G := hinge_form_nonneg c a _
   constructor
   · rintro ⟨ha, hcard, hhinge⟩
     have hbound := full_correction_le_line a ha
     rw [hcard] at hbound
-    norm_num only [Nat.cast_mul, Nat.cast_ofNat] at hbound
     rw [hdecomp ha hcard] at hhinge
-    change G + (C - Corr) ≤ C - (3 * (d : ℝ) / 2 - (1 + dot a (canon_e 0))⁻¹)
-      at hhinge
+    change G + (C - Corr) ≤ C - 3 * (d : ℝ) / 4 at hhinge
     have hzero : G = 0 := by dsimp [Corr] at hhinge; linarith
-    have heq : (∑ i, (1 + a i)⁻¹) = ((2 * d : Nat) : ℝ) - dot a 1 / 2 := by
+    have heq : (∑ i, (1 + a i)⁻¹) = (d : ℝ) - dot a 1 / 2 := by
       rw [hcard]
-      norm_num only [Nat.cast_mul, Nat.cast_ofNat]
       dsimp [Corr] at hhinge
       linarith
-    have hbin := (full_correction_eq_binary_iff a ha).mp heq
-    refine ⟨hbin, ?_, ?_⟩
-    · rw [hcard]
-      push_cast
-      ring
-    · exact (second_gadget_hinge_form_iff (d : ℝ) c a s (by linarith) hc
-        ha.1 hs_nonneg hcard).mp hzero
-  · rintro ⟨hbin, hcard_half, hsum⟩
+    refine ⟨(full_correction_eq_binary_iff a ha).mp heq, hcard, ?_⟩
+    exact (second_gadget_hinge_form_iff ((d : ℝ) / 2) c a s (by linarith) hc
+      ha.1 hs_nonneg hcard).mp hzero
+  · rintro ⟨hbin, hcard, hsum⟩
     have ha := is_binary_box_constraints hbin
-    have hcard : dot a 1 = (d : ℝ) := by
-      norm_num only [Nat.cast_mul, Nat.cast_ofNat] at hcard_half
-      linarith
     have heq := (full_correction_eq_binary_iff a ha).mpr hbin
     rw [hcard] at heq
-    norm_num only [Nat.cast_mul, Nat.cast_ofNat] at heq
-    have hzero : G = 0 := (second_gadget_hinge_form_iff (d : ℝ) c a s
+    have hzero : G = 0 := (second_gadget_hinge_form_iff ((d : ℝ) / 2) c a s
       (by linarith) hc ha.1 hs_nonneg hcard).mpr hsum
     refine ⟨ha, hcard, ?_⟩
     rw [hdecomp ha hcard]
-    change G + (C - Corr) ≤ C - (3 * (d : ℝ) / 2 - (1 + dot a (canon_e 0))⁻¹)
+    change G + (C - Corr) ≤ C - 3 * (d : ℝ) / 4
     dsimp [Corr]
     linarith
 
+/-- For natural input weights, the fixed threshold is an integer multiple of `1/4`. -/
+theorem partition_schedule_threshold_quarter_integral (d : Nat) (s : Fin d → Nat) :
+    ∃ z : ℤ, partition_schedule_threshold d (fun i => (s i : ℝ)) = (z : ℝ) / 4 := by
+  refine ⟨(∑ i, (s i : ℤ)) * (d : ℤ) * ((d : ℤ) + 1) - 3 * (d : ℤ), ?_⟩
+  simp only [partition_schedule_threshold, dot, Pi.one_apply, mul_one]
+  push_cast
+  ring
 
 end CSeparatedNPComplete

@@ -43,10 +43,10 @@ private theorem cross_schedule_covariance_bounds {n : ℕ} {m : ℝ} {a : Vec n}
     · have hs1 := gaussian_schedule_separation_sum_ge_1 hm (Nat.pos_of_ne_zero hj)
       have hs0 := gaussian_schedule_separation_sum_nonneg m j j
       have hsle := gaussian_schedule_separation_sum_diagonal_mono hm hjn
-      have he : 0 ≤ canon_e j i ∧ canon_e j i ≤ 1 := by
+      have he : 0 ≤ canon_e (j - 1) i ∧ canon_e (j - 1) i ≤ 1 := by
         simp only [canon_e]
         split_ifs <;> norm_num
-      have haxis : 1 ≤ m * canon_e j i + 1 ∧ m * canon_e j i + 1 ≤ m + 1 := by
+      have haxis : 1 ≤ m * canon_e (j - 1) i + 1 ∧ m * canon_e (j - 1) i + 1 ≤ m + 1 := by
         constructor
         · nlinarith [mul_nonneg hm0 he.1]
         · nlinarith [mul_le_mul_of_nonneg_left he.2 hm0]
@@ -63,19 +63,17 @@ private theorem cross_schedule_covariance_bounds {n : ℕ} {m : ℝ} {a : Vec n}
     rw [cross_dot_const, hsum] at hu
     exact hu
 
-private theorem cross_mean_gap {n j : ℕ} {m : ℝ} (hm : 2 ≤ m) (hj : j < n) :
+private theorem cross_mean_gap {n j : ℕ} {m : ℝ} (hm : 2 ≤ m) (hn : 0 < n) (hj : j ≤ n) :
     second_gadget_gamma n m * (m - 1) ≤
       second_gadget_gamma n m * m ^ n - m ^ j := by
   have hm1 : 1 ≤ m := by linarith
-  have hg := cross_gamma_ge_one (n := n) hm
-  have hpj : 0 ≤ m ^ j := pow_nonneg (by linarith) j
-  have hp1 : 1 ≤ m ^ j := one_le_pow₀ hm1
-  have hpow : m * m ^ j ≤ m ^ n := by
-    simpa only [pow_succ, mul_comm] using pow_le_pow_right₀ hm1 (Nat.succ_le_of_lt hj)
-  have htail : m - 1 ≤ m ^ n - m ^ j := by
-    nlinarith [mul_nonneg (show 0 ≤ m - 1 by linarith) (show 0 ≤ m ^ j - 1 by linarith)]
-  nlinarith [mul_le_mul_of_nonneg_left htail (show 0 ≤ second_gadget_gamma n m by linarith),
-    mul_nonneg (show 0 ≤ second_gadget_gamma n m - 1 by linarith) hpj]
+  have hg : m ≤ second_gadget_gamma n m := by
+    unfold second_gadget_gamma
+    exact le_add_of_nonneg_right (gaussian_schedule_separation_sum_nonneg m n n)
+  have hpn : m ≤ m ^ n := le_self_pow₀ hm1 (by omega)
+  have hpj : m ^ j ≤ m ^ n := pow_le_pow_right₀ hm1 hj
+  nlinarith [mul_le_mul_of_nonneg_left hpn
+    (show 0 ≤ second_gadget_gamma n m - 1 by linarith)]
 
 private theorem cross_pair_zero {n : ℕ} {m c gap : ℝ} {a : Vec n}
     {g : Gaussian n} {j : ℕ} (ha : box_constraints a) (hsum : dot a 1 = m)
@@ -112,15 +110,15 @@ private theorem cross_scale_bound {m x t : ℝ} (hm : 0 ≤ m) (h : x ≤ t ^ 2)
 
 private theorem cross_pair_one {n : ℕ} {m c : ℝ} {a : Vec n}
     (hm : 2 ≤ m) (hc : 1 ≤ c) (ha : box_constraints a) (hsum : dot a 1 = m)
-    {j : ℕ} (hj : j < n) :
+    {j : ℕ} (hn : 0 < n) (hj : j ≤ n) :
     gaussian_pair_hinge c a (second_gadget_g1 m c) (gaussian_schedule_class m j) = 0 := by
   let gamma := second_gadget_gamma n m
   have hg : 1 ≤ gamma := cross_gamma_ge_one hm
   have hm0 : 0 ≤ m := by linarith
   have hc0 : 0 ≤ c := by linarith
-  have hbase := cross_mean_gap hm hj
+  have hbase := cross_mean_gap hm hn hj
   change gamma * (m - 1) ≤ gamma * m ^ n - m ^ j at hbase
-  have hcov := cross_schedule_covariance_bounds hm ha hsum hj.le
+  have hcov := cross_schedule_covariance_bounds hm ha hsum hj
   have hsmall : c ≤ (c + m) ^ 2 := by nlinarith [sq_nonneg c, sq_nonneg m]
   have hscale := cross_scale_bound hm0 hsmall gamma
   apply cross_pair_zero ha hsum hc0 (mul_nonneg (by linarith) (by linarith))
@@ -136,15 +134,15 @@ private theorem cross_pair_one {n : ℕ} {m c : ℝ} {a : Vec n}
 
 private theorem cross_pair_two {n : ℕ} {m c : ℝ} {a s : Vec n}
     (hm : 2 ≤ m) (hc : 1 ≤ c) (ha : box_constraints a) (hsum : dot a 1 = m)
-    {j : ℕ} (hj : j < n) :
+    {j : ℕ} (hn : 0 < n) (hj : j ≤ n) :
     gaussian_pair_hinge c a (second_gadget_g2 m c s) (gaussian_schedule_class m j) = 0 := by
   let gamma := second_gadget_gamma n m
   have hg : 1 ≤ gamma := cross_gamma_ge_one hm
   have hm0 : 0 ≤ m := by linarith
   have hc0 : 0 ≤ c := by linarith
-  have hbase := cross_mean_gap hm hj
+  have hbase := cross_mean_gap hm hn hj
   change gamma * (m - 1) ≤ gamma * m ^ n - m ^ j at hbase
-  have hcov := cross_schedule_covariance_bounds hm ha hsum hj.le
+  have hcov := cross_schedule_covariance_bounds hm ha hsum hj
   have hsmall : c ≤ (c + m) ^ 2 := by nlinarith [sq_nonneg c, sq_nonneg m]
   have hlarge : c * m ≤ (c + m) ^ 2 := by
     nlinarith [sq_nonneg c, sq_nonneg m, mul_nonneg hc0 hm0]
@@ -165,15 +163,15 @@ private theorem cross_pair_two {n : ℕ} {m c : ℝ} {a s : Vec n}
 private theorem cross_pair_three {n : ℕ} {m c : ℝ} {a s : Vec n}
     (hm : 2 ≤ m) (hc : 1 ≤ c) (ha : box_constraints a) (hs : is_vec_leq 0 s)
     (hsum : dot a 1 = m) (hstotal : dot s 1 = 2 * c)
-    {j : ℕ} (hj : j < n) :
+    {j : ℕ} (hn : 0 < n) (hj : j ≤ n) :
     gaussian_pair_hinge c a (second_gadget_g3 m c s) (gaussian_schedule_class m j) = 0 := by
   let gamma := second_gadget_gamma n m
   have hg : 1 ≤ gamma := cross_gamma_ge_one hm
   have hm0 : 0 ≤ m := by linarith
   have hc0 : 0 ≤ c := by linarith
-  have hbase := cross_mean_gap hm hj
+  have hbase := cross_mean_gap hm hn hj
   change gamma * (m - 1) ≤ gamma * m ^ n - m ^ j at hbase
-  have hcov := cross_schedule_covariance_bounds hm ha hsum hj.le
+  have hcov := cross_schedule_covariance_bounds hm ha hsum hj
   have hsmall : c ≤ (2 * c) ^ 2 := by nlinarith
   have has : dot a s ≤ 2 * c := by
     calc
@@ -205,20 +203,20 @@ private theorem cross_pair_three {n : ℕ} {m c : ℝ} {a s : Vec n}
 /-- The shifted three-Gaussian gadget has no hinge contribution across the schedule. -/
 theorem second_gadget_schedule_hinge_form_app {n : ℕ} (m c : ℝ) (a s : Vec n)
     (hm : 2 ≤ m) (hc : 1 ≤ c) (ha : box_constraints a) (hs : is_vec_leq 0 s)
-    (hsum : dot a 1 = m) (hstotal : dot s 1 = 2 * c) :
-    hinge_form c a (second_gadget_instance m c s ++ gaussian_schedule m n) =
+    (hsum : dot a 1 = m) (hstotal : dot s 1 = 2 * c) (hn : 0 < n) :
+    hinge_form c a (second_gadget_instance m c s ++ gaussian_schedule m (n + 1)) =
       hinge_form c a (second_gadget_instance m c s) +
-        hinge_form c a (gaussian_schedule m n) := by
+        hinge_form c a (gaussian_schedule m (n + 1)) := by
   apply hinge_form_app_no_cross
   intro g hg
   apply hinge_against_eq_zero
   intro h hh
   obtain ⟨j, hj, rfl⟩ := List.mem_map.mp hh
-  have hjn : j < n := List.mem_range.mp hj
+  have hjn : j ≤ n := by have := List.mem_range.mp hj; omega
   simp only [second_gadget_instance, List.mem_cons, List.not_mem_nil, or_false] at hg
   rcases hg with rfl | rfl | rfl
-  · exact cross_pair_one hm hc ha hsum hjn
-  · exact cross_pair_two hm hc ha hsum hjn
-  · exact cross_pair_three hm hc ha hs hsum hstotal hjn
+  · exact cross_pair_one hm hc ha hsum hn hjn
+  · exact cross_pair_two hm hc ha hsum hn hjn
+  · exact cross_pair_three hm hc ha hs hsum hstotal hn hjn
 
 end CSeparatedNPComplete

@@ -5,16 +5,17 @@ Its intended complexity statement is NP-hardness of feature
 selection for relative Gaussian c-separation in the formulation of Borozan
 et al. The sole currently compared result is
 `CSeparatedNPComplete.partition_gadget_schedule_partition_iff`.
-It is a pointwise equivalence with a selector-dependent threshold; the entry
+It is a pointwise equivalence with the fixed threshold
+`(dot s 1 / 2)*d*(d+1)/2 - 3*d/4`, where `d` is the full dimension. The entry
 does not claim a complete NP-hardness reduction. See [README.md](README.md)
 and the independent [Challenge.lean](Challenge.lean) for the mathematical scope.
 
 The proof first reduces ordinary PARTITION to equal-cardinality partition of
 positive squares. Square roots and the even total of the paired construction
 make the Gaussian data integral. Three Gaussians impose partition balance;
-a schedule of `2d` Gaussians enforces binary selectors. The two blocks are
-placed far apart so their cross-block hinge penalties vanish. On binary
-certificates the threshold is an integer multiple of `1/2`.
+a schedule of `d+1` Gaussians enforces binary selectors. The two blocks are
+placed far apart so their cross-block hinge penalties vanish. The threshold is an integer multiple of `1/4` for natural input
+weights, as proved by `partition_schedule_threshold_quarter_integral`.
 
 Local checks on 2026-09-08 passed: the full Lean build, equality of the
 independent theorem types and 42 definition bodies, the standard-three-axiom
@@ -32,7 +33,7 @@ the mathematical NP-completeness argument and identifies which parts are
 formalized in Lean.
 
 The certificate theorem in [CERTIFICATES.md](CERTIFICATES.md) proves that the
-original gadget predicate has a `2d`-bit certificate, with soundness,
+original gadget predicate has a `d`-bit certificate, with soundness,
 completeness, and quadratic verification work in the stated bit-cost model.
 
 Before selecting the final snapshot:
