@@ -12,11 +12,18 @@ Bartol Borozan, Luka Borozan, Domagoj Ševerdija, Domagoj Matijević, and Stefan
 [*Optimal Marker Genes for c-Separated Cell Types*](https://doi.org/10.1007/978-3-031-90252-9_53),
 RECOMB 2025, pp. 424–427.
 
-This repository develops and proves an original reduction construction in Lean 4.
+This repository develops and proves a reduction construction in Lean 4.
 The main Lean result is the gadget equivalence
 `CSeparatedNPComplete.partition_gadget_schedule_partition_iff`. It is the sole
 Palomar submission target. The exact proved statement and its scope are described below.
 The formalization author and responsible maintainer is Tomislav Prusina.
+
+The Gaussian gadget equivalence and square-partition reduction were developed
+and first presented by the author in this formalization. Their mathematical
+novelty and priority relative to earlier literature are unknown. No systematic
+literature search or comparison establishing novelty or priority has been
+documented. The references identify background for the construction and its
+source problem; they do not establish novelty.
 
 ## Proof idea
 
@@ -90,8 +97,8 @@ Here a Gaussian class is represented by its mean and diagonal covariance
 vectors; the theorem does not construct probability measures. Zero input
 coordinates are allowed, so individual covariance coordinates may vanish.
 Real division uses Lean's total convention `D / 0 = 0`; the proof handles
-the gadget's denominators under the stated hypotheses. The original contribution
-is the reduction construction and its proofs; the Gaussian feature-selection
+the gadget's denominators under the stated hypotheses. This development supplies
+the reduction construction and its proofs; the Gaussian feature-selection
 formulation and standard background results are credited above and below.
 
 ## Auxiliary library results
@@ -183,9 +190,11 @@ Local checks on 2026-09-09 passed: the full build, the square-partition and
 certificate checks, and the main-theorem audit. In that audit, the independent main-theorem types and all 42
 checked definition bodies match, and Solution does not import Challenge.
 Local Lean checks of the auxiliary Karamata and gadget results have passed.
-The development uses AI assistance. Independent human mathematical review
-and Palomar submission have not been reported; successful full Comparator
-verification has not yet been confirmed.
+The development uses AI assistance. Palomar's automated review dated
+2026-09-21 reported mechanical verification success for the submitted snapshot.
+Independent human mathematical review has not been reported. The revised
+metadata and informal account require a new submission before registration
+can be considered.
 
 The repository is licensed under [Apache-2.0](LICENSE). The
 [verification scripts](scripts/README.md) and GitHub Actions workflow provide

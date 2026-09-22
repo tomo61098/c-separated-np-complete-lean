@@ -21,11 +21,15 @@ project:
     and numerical size bounds; its NP-completeness argument is documented prose.
     The original Gaussian gadget predicate also has a proved binary certificate
     verifier with soundness, completeness, and quadratic work in a bit-cost model.
+    The Gaussian gadget equivalence and square-partition reduction were developed
+    and first presented by the author in this formalization. Their mathematical
+    novelty and priority relative to earlier literature are unknown; no systematic
+    literature search or comparison establishing them has been documented.
   authors: ["Tomislav Prusina"]
   license: "Apache-2.0"
   responsible_maintainers: ["Tomislav Prusina"]
   authorship_note: >-
-    Tomislav Prusina is the author of the original reduction idea, the
+    Tomislav Prusina is the author of the reduction idea developed here, the
     formalization author, and the responsible maintainer, as confirmed by
     the user.
 
@@ -40,10 +44,16 @@ sources:
     relationship: "other"
     location: "Solution.lean; README.md; SQUARE_PARTITION.md"
     note: >-
-      Original results developed and proved in this repository: the Gaussian
-      gadget equivalence with a fixed threshold and the reduction from ordinary
-      PARTITION to equal-cardinality partition of positive squares. The papers
-      below supply background for the source problem and Gaussian formulation.
+      Results developed and first presented by the author in this formalization:
+      the Gaussian gadget equivalence with a fixed threshold and the reduction from ordinary
+      PARTITION to equal-cardinality partition of positive squares. The
+      original-proof source type records that provenance. Mathematical novelty
+      and priority relative to earlier literature are unknown. No systematic
+      literature search or comparison establishing novelty or priority has been
+      documented. The papers below supply background for the source problem and
+      Gaussian formulation; they do not establish novelty. The empty
+      related_formalizations list records no identified earlier formalization,
+      and does not establish that none exists.
   - title: "Reducibility Among Combinatorial Problems"
     authors: ["Richard M. Karp"]
     type: "paper"
@@ -69,7 +79,7 @@ sources:
       Published background for the Gaussian c-separation feature-selection
       formulation. Relative separation measures class mean differences against
       within-class variation. The reduction construction and its proofs are
-      this project's original contribution.
+      developed in this formalization; their novelty and priority are unknown.
 
 related_formalizations: []
 
@@ -101,7 +111,11 @@ status:
       comparator_config: "comparator.json"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      verification_status: "Lean build, independent statement and definition comparison, and axiom audit passed; full Comparator verification pending"
+      verification_status: >-
+        Lean build, independent statement and definition comparison, and axiom
+        audit passed. Palomar's 2026-09-21 automated review reported mechanical
+        verification success for the submitted snapshot. The revised snapshot
+        awaits resubmission.
 
 automation:
   methods:
@@ -186,13 +200,17 @@ review:
     passed Lean checks. Their axiom audits found only the three
     standard axioms. The unconditional reduction, positivity, injectivity, and
     numerical bounds passed the full build; positive yes- and no-instance checks
-    and axiom audits also passed on 2026-09-08. CI includes full Comparator and NanoDa replay, but a
-    successful full replay has not yet been confirmed.
+    and axiom audits also passed on 2026-09-08. CI includes full Comparator and
+    NanoDa replay. Palomar's automated review dated 2026-09-21 reported mechanical
+    verification success for the submitted snapshot.
     The polynomial certificate module passed the full build. Acceptance and
     rejection checks, bit-length-sensitive cost checks, the concrete Gaussian
     example, and certificate axiom audits passed on 2026-09-08. The main theorem
     and all 42 independent definition bodies still match Challenge.
-    No independent human mathematical review or Palomar submission has occurred.
+    Novelty and priority are recorded as unknown because no systematic literature
+    search or comparison establishing them has been documented. This provenance
+    clarification awaits a new submission and automated review. No independent
+    human mathematical review has been reported.
 
 alignment:
   namespace: "CSeparatedNPComplete"

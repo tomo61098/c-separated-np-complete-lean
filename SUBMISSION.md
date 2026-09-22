@@ -1,6 +1,6 @@
 # Palomar submission
 
-This project develops and proves Tomislav Prusina's original reduction idea.
+This project develops and proves Tomislav Prusina's reduction idea.
 Its intended complexity statement is NP-hardness of feature
 selection for relative Gaussian c-separation in the formulation of Borozan
 et al. The sole currently compared result is
@@ -9,6 +9,13 @@ It is a pointwise equivalence with the fixed threshold
 `(dot s 1 / 2)*d*(d+1)/2 - 3*d/4`, where `d` is the full dimension. The entry
 does not claim a complete NP-hardness reduction. See [README.md](README.md)
 and the independent [Challenge.lean](Challenge.lean) for the mathematical scope.
+
+The Gaussian gadget equivalence and square-partition reduction were developed
+and first presented by the author in this formalization. Their mathematical
+novelty and priority relative to earlier literature are unknown. No systematic
+literature search or comparison establishing novelty or priority has been
+documented. The `original-proof` metadata records this development's provenance;
+the background references do not establish novelty.
 
 The proof first reduces ordinary PARTITION to equal-cardinality partition of
 positive squares. Square roots and the even total of the paired construction
@@ -22,11 +29,16 @@ Lean build, equality of the independent theorem types and 42 definition
 bodies, the standard-three-axiom audit, and Solution's independence from
 Challenge. The square-partition and certificate checks also passed, including
 the threshold regressions. The pinned Palomar metadata validator and repository
-submission preflight also passed on 2026-09-09, with the result classified
-as original. Tomislav Prusina is recorded as the
+submission preflight also passed on 2026-09-09, with the provenance classified
+as `original-proof`. That metadata classification does not establish novelty.
+Tomislav Prusina is recorded as the
 author and responsible maintainer.
-A successful full Comparator/NanoDa replay has not yet been confirmed;
-no Palomar submission has been made.
+Palomar's automated review dated 2026-09-21 reported mechanical verification
+success for the submitted snapshot. The metadata and informal account now
+explicitly qualify novelty and priority as unknown. The corrected commit must
+be pushed and submitted as a new submission; the earlier reviewed commit does
+not contain this revision. Leave the existing Palomar ID blank while the result
+is unregistered.
 
 The auxiliary ordinary-PARTITION reduction now has an explicit base, an
 unrestricted reverse implication, positive-square outputs, injectivity, and
