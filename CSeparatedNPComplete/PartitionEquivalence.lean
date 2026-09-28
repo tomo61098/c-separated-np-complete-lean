@@ -1,6 +1,10 @@
-import CSeparatedNPComplete.CrossGadget
-import CSeparatedNPComplete.Gadget
-import CSeparatedNPComplete.Reciprocal
+module
+
+public import CSeparatedNPComplete.CrossGadget
+public import CSeparatedNPComplete.Gadget
+public import CSeparatedNPComplete.Reciprocal
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

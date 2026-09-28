@@ -1,4 +1,8 @@
-import Solution
+module
+
+public import Solution
+
+@[expose] public section
 
 /-!
 Checks for the source construction and the unconditional ordinary-PARTITION

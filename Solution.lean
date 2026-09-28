@@ -1,4 +1,8 @@
-import CSeparatedNPComplete
+module
+
+public import CSeparatedNPComplete
+
+@[expose] public section
 
 /-!
 # The partition gadget and Gaussian schedule equivalence

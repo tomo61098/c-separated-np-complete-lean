@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: PalomarRegistry/PalomarSubmission
-          ref: c605f23466450a52999fcfb3c6d68ed8febc56bf
+          ref: 65f0154ed776cd26c224254aa57b379137f28b0d
           path: .cache/palomar-policy
           persist-credentials: false
       - name: Install the validator's pinned dependencies
@@ -35,6 +35,8 @@ jobs:
           .cache/metadata-venv/bin/python -m pip install --require-hashes -r scripts/requirements-metadata.txt
       - name: Validate submission metadata and repository layout
         run: .cache/metadata-venv/bin/python scripts/validate-submission.py --policy-root .cache/palomar-policy
+      - name: Check submission preflight regressions
+        run: .cache/metadata-venv/bin/python scripts/test-validate-submission.py --policy-root .cache/palomar-policy
       - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
         with:
           ruby-version: "3.3.12"
@@ -68,7 +70,7 @@ jobs:
         run: lake env lean scripts/PolynomialCertificateChecks.lean
 
   comparator:
-    name: Comparator and NanoDa replay
+    name: Comparator, NanoDa, and con-ron replay
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     env:
@@ -77,7 +79,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - name: Free space for both Lean toolchains and proof exports
+      - name: Free space for Lean and proof exports
         if: runner.environment == 'github-hosted'
         run: |
           df -h "$GITHUB_WORKSPACE"
@@ -90,11 +92,9 @@ jobs:
           # The replay script fetches only this project's Mathlib imports.
           use-mathlib-cache: "false"
           use-github-cache: "false"
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
-        with:
-          go-version: "1.24.0"
-          cache: false
-      - name: Enable the sandbox wrapper
-        run: chmod +x scripts/landrun-wrapper.sh
-      - name: Run the pinned Comparator toolchain
+      - name: Install the Comparator sandbox
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes bubblewrap
+      - name: Run the toolchain's Comparator and bundled kernels
         run: bash scripts/verify-comparator.sh

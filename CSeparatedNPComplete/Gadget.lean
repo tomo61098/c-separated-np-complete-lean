@@ -1,6 +1,10 @@
-import CSeparatedNPComplete.PartitionDefs
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+module
+
+public import CSeparatedNPComplete.PartitionDefs
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

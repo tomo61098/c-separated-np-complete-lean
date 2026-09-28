@@ -1,6 +1,10 @@
-import CSeparatedNPComplete.PartitionBasic
-import Mathlib.Order.Interval.Finset.Nat
-import Mathlib.Tactic
+module
+
+public import CSeparatedNPComplete.PartitionBasic
+public import Mathlib.Order.Interval.Finset.Nat
+public import Mathlib.Tactic
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

@@ -1,90 +1,60 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Fetch the project cache explicitly below, after the verification tools build.
+# Fetch only this project's Mathlib imports below.
 export MATHLIB_NO_CACHE_ON_UPDATE=1
 
 repository_root=$(cd "$(dirname "$0")/.." && pwd)
-cache_root=${PALOMAR_COMPARATOR_CACHE:-"$repository_root/.cache/palomar-comparator"}
-bin_dir="$cache_root/bin"
-comparator_dir="$cache_root/comparator"
-lean4export_dir="$cache_root/lean4export"
-nanoda_dir="$cache_root/nanoda"
+cd "$repository_root"
 
-comparator_commit=68a064109f01c08f47c8edc9f51d6a2bbffaa188
-lean4export_commit=4e7915201d3f9f04470d9eae002fa695f7cdc589
-landrun_commit=811cfff51ceaf3d9843708aa6d22e9b84ccac8b4
-nanoda_commit=68d5ca9db226849b41a6fff59d796ff19d0a8840
-
-for required_command in cargo git go lake python3; do
+for required_command in bwrap git lake lean python3; do
   if ! command -v "$required_command" >/dev/null 2>&1; then
-    echo "error: $required_command is required to run Comparator" >&2
+    echo "error: $required_command is required to run lake comparator" >&2
     exit 1
   fi
 done
 
-python3 - "$repository_root/comparator.json" <<'PY'
+# Lean 4.35.0-rc2 bundles the comparator, exporter, and replay kernels.
+# Their versions are selected together by the project's lean-toolchain.
+toolchain=$(tr -d '[:space:]' < lean-toolchain)
+prefix=$(lean --print-prefix)
+for tool in lake leanexport leanchecker nanoda_bin con-ron; do
+  if [ ! -x "$prefix/bin/$tool" ]; then
+    echo "error: toolchain $toolchain does not bundle $tool" >&2
+    echo "Palomar requires leanprover/lean4:v4.35.0-rc2 or later" >&2
+    exit 1
+  fi
+done
+
+# Palomar supplies both bundled independent kernels itself. Keep this generated
+# configuration out of comparator.json, where external_kernels is forbidden.
+config=$(mktemp "${TMPDIR:-/tmp}/palomar-comparator.XXXXXX")
+trap 'rm -f "$config"' EXIT
+python3 - comparator.json "$config" "$prefix" <<'PY'
 import json
 import pathlib
 import sys
 
-config_path = pathlib.Path(sys.argv[1])
+source, destination, prefix = sys.argv[1:]
 try:
-    config = json.loads(config_path.read_text(encoding="utf-8"))
+    config = json.loads(pathlib.Path(source).read_text(encoding="utf-8"))
 except (OSError, UnicodeError, json.JSONDecodeError) as error:
-    print(f"error: cannot read valid Comparator config {config_path}: {error}", file=sys.stderr)
+    print(f"error: cannot read valid Comparator config {source}: {error}", file=sys.stderr)
     raise SystemExit(1)
-
-if not isinstance(config, dict) or config.get("enable_nanoda") is not True:
-    print(
-        f"error: {config_path}: enable_nanoda must be exactly true; "
-        "the NanoDa replay is required",
-        file=sys.stderr,
-    )
+if not isinstance(config, dict):
+    print(f"error: {source} must contain one JSON object", file=sys.stderr)
     raise SystemExit(1)
+if "external_kernels" in config:
+    print(f"error: {source}: external_kernels is not a submitter field; Palomar rejects it", file=sys.stderr)
+    raise SystemExit(1)
+config.pop("enable_nanoda", None)
+config["external_kernels"] = {
+    "nanoda": [f"{prefix}/bin/nanoda_bin"],
+    "con-ron": [f"{prefix}/bin/con-ron"],
+}
+pathlib.Path(destination).write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
 PY
 
-mkdir -p "$cache_root" "$bin_dir"
-
-checkout_exact() {
-  local repository=$1
-  local destination=$2
-  local commit=$3
-  if [ ! -d "$destination/.git" ]; then
-    git clone --filter=blob:none "$repository" "$destination"
-  fi
-  git -C "$destination" fetch --depth 1 origin "$commit"
-  git -C "$destination" checkout --detach "$commit"
-}
-
-checkout_exact https://github.com/leanprover/lean4export.git "$lean4export_dir" "$lean4export_commit"
-
-if [ ! -f "$lean4export_dir/lean-toolchain" ]; then
-  echo "error: pinned lean4export revision $lean4export_commit has no lean-toolchain file" >&2
-  echo "select a lean4export revision that declares its Lean toolchain" >&2
-  exit 1
-fi
-
-project_toolchain=$(tr -d '[:space:]' < "$repository_root/lean-toolchain")
-lean4export_toolchain=$(tr -d '[:space:]' < "$lean4export_dir/lean-toolchain")
-if [ "$project_toolchain" != "$lean4export_toolchain" ]; then
-  echo "error: project toolchain $project_toolchain does not match" >&2
-  echo "the pinned lean4export toolchain $lean4export_toolchain" >&2
-  echo "update lean4export_commit when changing lean-toolchain, then review" >&2
-  echo "Comparator and NanoDa compatibility with the export format" >&2
-  exit 1
-fi
-
-checkout_exact https://github.com/leanprover/comparator.git "$comparator_dir" "$comparator_commit"
-checkout_exact https://github.com/robsimmons/nanoda_lib.git "$nanoda_dir" "$nanoda_commit"
-
-GOBIN="$bin_dir" go install "github.com/zouuup/landrun/cmd/landrun@$landrun_commit"
-
-(cd "$comparator_dir" && lake build comparator)
-(cd "$lean4export_dir" && lake build lean4export)
-(cd "$nanoda_dir" && cargo build --release --locked)
-
-cd "$repository_root"
 # With no module arguments, Mathlib downloads its entire library. Collect this
 # project's direct Mathlib imports; cache get includes their transitive imports.
 python3 - "$repository_root" <<'PY'
@@ -100,7 +70,7 @@ modules = sorted({
     match.group(1)
     for source in sources
     for match in re.finditer(
-        r"^import\s+(Mathlib(?:\.[A-Za-z0-9_']+)*)\s*$",
+        r"^(?:public\s+)?(?:meta\s+)?import\s+(Mathlib(?:\.[A-Za-z0-9_']+)*)\s*$",
         source.read_text(encoding="utf-8"),
         re.MULTILINE,
     )
@@ -110,8 +80,4 @@ if not modules:
 print(f"Fetching cache for {len(modules)} Mathlib imports and their dependencies", flush=True)
 subprocess.run(["lake", "exe", "cache", "get", *modules], cwd=root, check=True)
 PY
-PALOMAR_LANDRUN_BIN="$bin_dir/landrun" \
-COMPARATOR_LEAN4EXPORT="$lean4export_dir/.lake/build/bin/lean4export" \
-COMPARATOR_NANODA="$nanoda_dir/target/release/nanoda_bin" \
-COMPARATOR_LANDRUN="$repository_root/scripts/landrun-wrapper.sh" \
-  lake env "$comparator_dir/.lake/build/bin/comparator" comparator.json
+lake comparator --config "$config"

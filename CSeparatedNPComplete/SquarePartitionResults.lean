@@ -1,4 +1,8 @@
-import CSeparatedNPComplete.SquareReduction
+module
+
+public import CSeparatedNPComplete.SquareReduction
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

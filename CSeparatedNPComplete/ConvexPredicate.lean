@@ -1,6 +1,10 @@
-import CSeparatedNPComplete.Definitions
-import Mathlib.Analysis.Convex.Function
-import Mathlib.Tactic.Linarith
+module
+
+public import CSeparatedNPComplete.Definitions
+public import Mathlib.Analysis.Convex.Function
+public import Mathlib.Tactic.Linarith
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

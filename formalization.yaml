@@ -200,8 +200,8 @@ review:
     passed Lean checks. Their axiom audits found only the three
     standard axioms. The unconditional reduction, positivity, injectivity, and
     numerical bounds passed the full build; positive yes- and no-instance checks
-    and axiom audits also passed on 2026-09-08. CI includes full Comparator and
-    NanoDa replay. Palomar's automated review dated 2026-09-21 reported mechanical
+    and axiom audits also passed on 2026-09-08. CI includes the toolchain's bundled
+    Comparator with NanoDa and con-ron replay. Palomar's automated review dated 2026-09-21 reported mechanical
     verification success for the submitted snapshot.
     The polynomial certificate module passed the full build. Acceptance and
     rejection checks, bit-length-sensitive cost checks, the concrete Gaussian

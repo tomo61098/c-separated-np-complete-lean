@@ -1,4 +1,8 @@
-import CSeparatedNPComplete.SquarePartition
+module
+
+public import CSeparatedNPComplete.SquarePartition
+
+@[expose] public section
 
 /-!
 # Ordinary PARTITION to equal-cardinality partition of positive squares

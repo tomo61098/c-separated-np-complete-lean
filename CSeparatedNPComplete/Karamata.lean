@@ -1,6 +1,10 @@
-import CSeparatedNPComplete.ConvexPredicate
-import CSeparatedNPComplete.ConvexSlopes
-import CSeparatedNPComplete.WeightedSum
+module
+
+public import CSeparatedNPComplete.ConvexPredicate
+public import CSeparatedNPComplete.ConvexSlopes
+public import CSeparatedNPComplete.WeightedSum
+
+@[expose] public section
 
 /-!
 # Karamata's inequality

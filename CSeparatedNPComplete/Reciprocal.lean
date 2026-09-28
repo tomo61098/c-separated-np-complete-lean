@@ -1,4 +1,8 @@
-import CSeparatedNPComplete.PartitionBasic
+module
+
+public import CSeparatedNPComplete.PartitionBasic
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

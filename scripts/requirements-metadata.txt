@@ -1,5 +1,5 @@
 # Same dependency version and hashes as PalomarSubmission at
-# c605f23466450a52999fcfb3c6d68ed8febc56bf, plus the CPython 3.12 Linux x86_64
+# 65f0154ed776cd26c224254aa57b379137f28b0d, plus the CPython 3.12 Linux x86_64
 # wheel selected on ubuntu-24.04. The added ba1cc08a... hash was verified
 # against https://pypi.org/pypi/PyYAML/6.0.3/json and the downloaded wheel.
 # Keep this pin aligned with the validator revision in .github/workflows/ci.yml.

@@ -1,6 +1,10 @@
-import CSeparatedNPComplete.Schedule
-import CSeparatedNPComplete.PartitionBasic
-import Mathlib.Tactic
+module
+
+public import CSeparatedNPComplete.Schedule
+public import CSeparatedNPComplete.PartitionBasic
+public import Mathlib.Tactic
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

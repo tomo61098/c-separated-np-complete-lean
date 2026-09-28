@@ -1,6 +1,10 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Algebra.BigOperators.Fin
-import Mathlib.Analysis.Real.Sqrt
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Algebra.BigOperators.Fin
+public import Mathlib.Analysis.Real.Sqrt
+
+@[expose] public section
 
 /-!
 # NP-hardness of Gaussian c-separation

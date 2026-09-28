@@ -1,5 +1,9 @@
-import CSeparatedNPComplete.Definitions
-import Mathlib.Analysis.Real.Sqrt
+module
+
+public import CSeparatedNPComplete.Definitions
+public import Mathlib.Analysis.Real.Sqrt
+
+@[expose] public section
 
 /-!
 The Gaussian construction uses functions for vectors and lists for Gaussian

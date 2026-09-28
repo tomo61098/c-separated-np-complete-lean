@@ -1,4 +1,8 @@
-import Solution
+module
+
+public import Solution
+
+@[expose] public section
 
 open CSeparatedNPComplete
 open CSeparatedNPComplete.PolynomialCertificate

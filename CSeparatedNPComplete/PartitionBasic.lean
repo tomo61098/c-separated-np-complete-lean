@@ -1,5 +1,9 @@
-import CSeparatedNPComplete.PartitionDefs
-import Mathlib.Tactic
+module
+
+public import CSeparatedNPComplete.PartitionDefs
+public import Mathlib.Tactic
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

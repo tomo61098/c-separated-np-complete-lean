@@ -1,4 +1,8 @@
+module
+
 import Lean
+
+public section
 
 /-!
 Local preflight: compare the independently elaborated Challenge and Solution
@@ -11,9 +15,12 @@ open Lean
 
 unsafe def main : IO Unit := do
   initSearchPath (← findSysroot)
-  let challenge ← importModules #[{ module := `Challenge }] {}
+  -- Load private data as well, so bodies and proofs remain available for auditing
+  -- when Challenge and Solution use the module system.
+  let challenge ← importModules #[{ module := `Challenge }] {} (level := .private)
   enableInitializersExecution
-  let solution ← importModules #[{ module := `Solution }] {} (loadExts := true)
+  let solution ← importModules #[{ module := `Solution }] {}
+    (loadExts := true) (level := .private)
   let target := `CSeparatedNPComplete.partition_gadget_schedule_partition_iff
   let some challengeTheorem := challenge.find? target
     | throw <| IO.userError "Main theorem missing from Challenge"
@@ -35,6 +42,8 @@ unsafe def main : IO Unit := do
         unless value.value == otherValue.value do
           throw <| IO.userError s!"Definition body differs: {name}"
         count := count + 1
+  if count == 0 then
+    throw <| IO.userError "No project definition bodies were checked"
   let (axioms, _) ← (collectAxioms target : CoreM (Array Name)).toIO
     { fileName := "scripts/Audit.lean", fileMap := default } { env := solution }
   let permitted := #[`propext, `Classical.choice, `Quot.sound]

@@ -1,7 +1,11 @@
-import Mathlib.Analysis.Convex.Slope
-import Mathlib.Order.Monotone.Extension
-import Mathlib.Data.Set.Finite.Lattice
-import Mathlib.Algebra.Order.Archimedean.Real.Basic
+module
+
+public import Mathlib.Analysis.Convex.Slope
+public import Mathlib.Order.Monotone.Extension
+public import Mathlib.Data.Set.Finite.Lattice
+public import Mathlib.Algebra.Order.Archimedean.Real.Basic
+
+@[expose] public section
 
 namespace CSeparatedNPComplete
 

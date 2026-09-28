@@ -1,9 +1,11 @@
-import CSeparatedNPComplete.Karamata
-import CSeparatedNPComplete.CrossGadget
-import CSeparatedNPComplete.Gadget
-import CSeparatedNPComplete.Reciprocal
-import CSeparatedNPComplete.SquarePartition
-import CSeparatedNPComplete.SquareReduction
-import CSeparatedNPComplete.SquarePartitionResults
-import CSeparatedNPComplete.PartitionEquivalence
-import CSeparatedNPComplete.PolynomialCertificate
+module
+
+public import CSeparatedNPComplete.Karamata
+public import CSeparatedNPComplete.CrossGadget
+public import CSeparatedNPComplete.Gadget
+public import CSeparatedNPComplete.Reciprocal
+public import CSeparatedNPComplete.SquarePartition
+public import CSeparatedNPComplete.SquareReduction
+public import CSeparatedNPComplete.SquarePartitionResults
+public import CSeparatedNPComplete.PartitionEquivalence
+public import CSeparatedNPComplete.PolynomialCertificate

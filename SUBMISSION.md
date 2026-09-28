@@ -53,6 +53,11 @@ completeness, and quadratic verification work in the stated bit-cost model.
 
 Before selecting the final snapshot:
 
+The project now pins Lean `v4.35.0-rc2` and matching Mathlib to meet Palomar's
+minimum version. All Lean sources use module headers, and CI uses the bundled
+Comparator with both NanoDa and con-ron. Earlier verification results apply
+to their recorded snapshots; this toolchain migration needs fresh checks.
+
 1. Review [formalization.yaml](formalization.yaml). Tomislav Prusina is the
    confirmed author and responsible maintainer. The published formulation
    is identified in the source metadata.
@@ -61,7 +66,7 @@ Before selecting the final snapshot:
    `lake env lean scripts/PolynomialCertificateChecks.lean`.
 3. Commit and push the changes, then require all three jobs in
    [Submission checks](https://github.com/tomo61098/c-separated-np-complete-lean/actions/workflows/ci.yml)
-   to pass at that commit, including Comparator and NanoDa replay.
+   to pass at that commit, including Comparator, NanoDa, and con-ron replay.
 4. Obtain the full 40-character SHA with `git rev-parse HEAD`. If anything
    changes after the checks, push and verify the new commit.
 

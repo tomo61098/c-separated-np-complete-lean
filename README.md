@@ -169,12 +169,21 @@ cost model, and scope.
 
 ## Build
 
+The project pins Lean `v4.35.0-rc2` and the matching Mathlib release, satisfying
+Palomar's minimum toolchain version. Elan installs the pinned Lean version
+when running Lake. All Lean sources use the module system; public definitions
+remain exposed for the independent Challenge/Solution comparison.
+
 ```text
 lake build
 lake env lean --run scripts/Audit.lean
 lake env lean scripts/SquarePartitionChecks.lean
 lake env lean scripts/PolynomialCertificateChecks.lean
 ```
+
+On Linux, `bash scripts/verify-comparator.sh` also runs the toolchain's bundled
+Comparator with NanoDa and con-ron replay; see [scripts/README.md](scripts/README.md)
+for prerequisites.
 
 `Solution.lean` contains Karamata and the square and Gaussian iff results;
 their supporting proofs are in the library. The main proof's axiom dependencies are exactly `propext`,

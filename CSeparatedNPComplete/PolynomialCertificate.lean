@@ -1,5 +1,9 @@
-import CSeparatedNPComplete.PartitionEquivalence
-import Mathlib.Data.Nat.Size
+module
+
+public import CSeparatedNPComplete.PartitionEquivalence
+public import Mathlib.Data.Nat.Size
+
+@[expose] public section
 
 /-!
 # Polynomial certificates for the constructed Gaussian instances

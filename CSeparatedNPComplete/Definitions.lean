@@ -1,5 +1,9 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Algebra.BigOperators.Fin
+module
+
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Algebra.BigOperators.Fin
+
+@[expose] public section
 
 /-!
 Definitions shared by the solution proofs. `Challenge.lean` states these independently

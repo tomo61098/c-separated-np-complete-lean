@@ -30,11 +30,12 @@ def main():
     try:
         from scripts.render_challenge import validated_audit_declarations
         from scripts.verification_errors import VerificationError
-        from scripts.verify_submission import load_comparator_config
+        from scripts.verify_submission import load_comparator_config, supported_toolchain
     except ImportError as error:
         parser.error(f"cannot load Palomar renderer helpers: {error}; install the policy dependencies")
 
     try:
+        supported_toolchain((root / "lean-toolchain").read_text(encoding="utf-8").strip())
         config = load_comparator_config(root / "comparator.json")
         declarations = [
             *(("theorem", name) for name in config["theorem_names"]),
